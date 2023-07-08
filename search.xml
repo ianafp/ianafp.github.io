@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>Hello World</title>
+    <url>/2023/07/08/hello-world/</url>
+    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+]]></content>
+      <tags>
+        <tag>博客使用说明</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>info</title>
+    <url>/2023/07/08/test/</url>
+    <content><![CDATA[<p>有什么问题可以在评论区留言，或者email联系<a href="mailto:&#x69;&#97;&#110;&#97;&#102;&#x70;&#x40;&#122;&#x6a;&#117;&#x2e;&#x65;&#x64;&#117;&#x2e;&#99;&#110;">&#x69;&#97;&#110;&#97;&#102;&#x70;&#x40;&#122;&#x6a;&#117;&#x2e;&#x65;&#x64;&#117;&#x2e;&#99;&#110;</a></p>
+]]></content>
+      <tags>
+        <tag>info</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>深度学习入门笔记1</title>
+    <url>/2023/07/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B01/</url>
+    <content><![CDATA[<h2 id="1-感知机"><a href="#1-感知机" class="headerlink" title="1 感知机"></a>1 感知机</h2><p><img src="C:\Users\86173\AppData\Roaming\Typora\typora-user-images\image-20230708131745739.png" alt="image-20230708131745739"></p>
+<p>感知机接收多个输入信号，输出一个信号。这里所说的“信号”可以想 象成电流或河流那样具备“流动性”的东西。像电流流过导线，向前方输送 电子一样，感知机的信号也会形成流，向前方输送信息。但是，和实际的电 流不同的是，感知机的信号只有“流&#x2F;不 流 ”（ 1&#x2F;0）两种取值。在《深度学习入门：基于Python的理论与实现》中，0 对应“不传递信号”，1对应“传递信号”。</p>
+<p>而$w_1,w_2$是信号的权重，感知机的工作模式可以用以下公式描述。<br>$$<br>y &#x3D;<br>\begin{cases}<br>0, \ w_1x_1+w_2x_2 &lt;&#x3D; \theta \<br>1, \ otherwise<br>\end{cases}</p>
+<p>$$<br>此处的$\theta$应理解为一个阈值。</p>
+]]></content>
+      <tags>
+        <tag>深度学习入门</tag>
+      </tags>
+  </entry>
+</search>
