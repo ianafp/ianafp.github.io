@@ -208,7 +208,7 @@
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2023-07-08 13:33:11 / 修改时间：14:28:51" itemprop="dateCreated datePublished" datetime="2023-07-08T13:33:11+08:00">2023-07-08</time>
+      <time title="创建时间：2023-07-08 15:13:59 / 修改时间：16:49:28" itemprop="dateCreated datePublished" datetime="2023-07-08T15:13:59+08:00">2023-07-08</time>
     </span>
 
   
@@ -221,10 +221,96 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h2 id="1-感知机"><a href="#1-感知机" class="headerlink" title="1 感知机"></a>1 感知机</h2><img src = "./picture/感知机.png">
-
-<p>感知机接收多个输入信号，输出一个信号。这里所说的“信号”可以想 象成电流或河流那样具备“流动性”的东西。像电流流过导线，向前方输送 电子一样，感知机的信号也会形成流，向前方输送信息。但是，和实际的电 流不同的是，感知机的信号只有“流&#x2F;不 流 ”（ 1&#x2F;0）两种取值。在《深度学习入门：基于Python的理论与实现》中，0 对应“不传递信号”，1对应“传递信号”。</p>
-<p>而$w_1,w_2$是信号的权重，感知机的工作模式可以用以下公式描述。<br>$$<br>y &#x3D;<br>\begin{cases}<br>0, \ w_1x_1+w_2x_2 &lt;&#x3D; \theta \<br>1, \ otherwise<br>\end{cases}<br>$$<br>此处的$\theta$应理解为一个阈值。<br>更通用的感知机形式为：<br>$$<br>y&#x3D;<br>\begin{cases}<br>0, \ b+ w_1x_1+w_2x_2 &lt;&#x3D; 0 \<br>1, \ otherwise<br>\end{cases}<br>$$<br>这里的b称为偏置。<br>通过简单的权重和偏置配置，感知机模型可以用来实现简单的与门，或门，非门应用，通过多层感知机（事实上与数字电路中的多层门电路同理）能够实现异或门或更复杂的感知机应用。</p>
+          <hr>
+<h2 id="感知机">1 感知机</h2>
+<p><img src="/2023/07/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B01/image-20230708131745739.png"></p>
+<p>感知机接收多个输入信号，输出一个信号。这里所说的“信号”可以想
+象成电流或河流那样具备“流动性”的东西。像电流流过导线，向前方输送
+电子一样，感知机的信号也会形成流，向前方输送信息。但是，和实际的电
+流不同的是，感知机的信号只有“流/不 流 ”（
+1/0）两种取值。在《深度学习入门：基于Python的理论与实现》中，0
+对应“不传递信号”，1对应“传递信号”。</p>
+<p>而<span class="math inline">\(w_1,w_2\)</span>是信号的权重，感知机的工作模式可以用以下公式描述。
+<span class="math display">\[
+y =
+\begin{cases}
+0, \ w_1x_1+w_2x_2 &lt;= \theta \\
+1, \ otherwise
+\end{cases}
+\]</span> 此处的<span class="math inline">\(\theta\)</span>应理解为一个阈值。</p>
+<p>上式也可写作 <span class="math display">\[
+y = \begin{cases}0, b + w_1x_1+w_2x_2 &lt;= 0 \\1, \
+otherwise\end{cases}
+\]</span> 其中<span class="math inline">\(b\)</span>称为偏差,
+反应感知机易于激活的程度。</p>
+<p>也可以将感知机中的偏差<span class="math inline">\(b\)</span>显示地表达出来</p>
+<figure>
+<img src="/2023/07/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B01/image-20230708160702807.png" alt="image-20230708160702807">
+<figcaption aria-hidden="true">image-20230708160702807</figcaption>
+</figure>
+<p>将上式进一步简化后可表达为 <span class="math display">\[
+y = h(b+w_1x_1+w_2x_2) \\
+h(x)= \begin{cases}
+0, x \le 0 \\
+1, x &gt; 1
+\end{cases}
+\]</span></p>
+<h2 id="神经网络">2 神经网络</h2>
+<h3 id="神经网络层">2.1 神经网络层</h3>
+<p>一个神经网络的例子，本书中将输入层，中间层，输出层依次作为0，1，2层</p>
+<figure>
+<img src="/2023/07/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B01/image-20230708161048708.png" alt="image-20230708161048708">
+<figcaption aria-hidden="true">image-20230708161048708</figcaption>
+</figure>
+<h3 id="激活函数">2.2 激活函数</h3>
+<p>在感知机部分中我们引入过<span class="math inline">\(h(x)\)</span>,
+这类函数一般都是将输入信号总和转为一个输出信号。</p>
+<p>在感知机中的工作模式如下 <span class="math display">\[
+a = b + w_1x_1+w_2x_2  \\
+y = h(a)
+\]</span> 在感知机中显示得表达出<span class="math inline">\(h(x)\)</span>的工作</p>
+<figure>
+<img src="/2023/07/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B01/image-20230708161520990.png" alt="image-20230708161520990">
+<figcaption aria-hidden="true">image-20230708161520990</figcaption>
+</figure>
+<h4 id="sigmod函数">2.2.1 sigmod函数</h4>
+<p><span class="math display">\[
+h(x) = \frac{1}{1+e^{-x}}
+\]</span></p>
+<p>sigmod函数是一种常见的激活函数。</p>
+<h4 id="阶跃函数">2.2.2 阶跃函数</h4>
+<p>阶跃函数很简单，就是根据一个阈值将连续输入转为离散化的输出，和第一部分感知机中讲述的<span class="math inline">\(h(x)\)</span>
+是一样的，类似于我们在学微积分时候的sign函数。</p>
+<p>以下是阶跃函数和sigmod函数的图像对比。</p>
+<figure>
+<img src="/2023/07/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B01/image-20230708162025130.png" alt="image-20230708162025130">
+<figcaption aria-hidden="true">image-20230708162025130</figcaption>
+</figure>
+<figure>
+<img src="/2023/07/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B01/image-20230708162036814.png" alt="image-20230708162036814">
+<figcaption aria-hidden="true">image-20230708162036814</figcaption>
+</figure>
+<h4 id="relu">2.2.3 ReLU</h4>
+<p>ReLU函数是近来使用较多的函数。 <span class="math display">\[
+h(x) = \begin{cases}
+x, x\ge 0 \\
+0, x &lt; 0
+\end{cases}
+\]</span> <img src="/2023/07/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B01/image-20230708162234505.png" alt="image-20230708162234505"></p>
+<h3 id="神经网络的内积">2.3 神经网络的内积</h3>
+<p>神经网络的运算基础是通过矩阵的乘法，示意图如下</p>
+<figure>
+<img src="/2023/07/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B01/image-20230708163116056.png" alt="image-20230708163116056">
+<figcaption aria-hidden="true">image-20230708163116056</figcaption>
+</figure>
+<p>多层神经网络如下图</p>
+<figure>
+<img src="/2023/07/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B01/image-20230708163211477.png" alt="image-20230708163211477">
+<figcaption aria-hidden="true">image-20230708163211477</figcaption>
+</figure>
+<h2 id="神经网络的学习">3 神经网络的学习</h2>
+<p>前面介绍了神经网络的工作模式，不难看出，保证神经网络正确工作（完成识别，分类等任务）的关键在于权重和神经元的数量。</p>
+<p>神经网络的关键点就在于如何从数据中学习，获得正确的参数。</p>
 
       
     </div>
@@ -294,7 +380,7 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <p>有什么问题可以在评论区留言，或者email联系<a href="mailto:&#x69;&#x61;&#x6e;&#x61;&#x66;&#112;&#64;&#x7a;&#x6a;&#x75;&#46;&#101;&#100;&#x75;&#x2e;&#99;&#110;">&#x69;&#x61;&#x6e;&#x61;&#x66;&#112;&#64;&#x7a;&#x6a;&#x75;&#46;&#101;&#100;&#x75;&#x2e;&#99;&#110;</a></p>
+          <p>有什么问题可以在评论区留言，或者email联系ianafp@zju.edu.cn</p>
 
       
     </div>
@@ -364,18 +450,23 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-
+          <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very
+first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for
+more info. If you get any problems when using Hexo, you can find the
+answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or
+you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+<h2 id="quick-start">Quick Start</h2>
+<h3 id="create-a-new-post">Create a new post</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
 <p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
+<h3 id="run-server">Run server</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
 <p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
+<h3 id="generate-static-files">Generate static files</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
 <p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
+<h3 id="deploy-to-remote-sites">Deploy to remote sites</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
 <p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
 
       
@@ -443,6 +534,12 @@
   
 
 
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
 
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
