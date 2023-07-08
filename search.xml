@@ -1,27 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>info</title>
-    <url>/2023/07/08/test/</url>
-    <content><![CDATA[<p>有什么问题可以在评论区留言，或者email联系<a href="mailto:&#x69;&#x61;&#110;&#97;&#x66;&#x70;&#x40;&#x7a;&#106;&#117;&#x2e;&#x65;&#x64;&#x75;&#46;&#99;&#110;">&#x69;&#x61;&#110;&#97;&#x66;&#x70;&#x40;&#x7a;&#106;&#117;&#x2e;&#x65;&#x64;&#x75;&#46;&#99;&#110;</a></p>
-]]></content>
-      <tags>
-        <tag>info</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>深度学习入门笔记1</title>
-    <url>/2023/07/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B01/</url>
-    <content><![CDATA[<h2 id="1-感知机"><a href="#1-感知机" class="headerlink" title="1 感知机"></a>1 感知机</h2><p><img src="C:\Users\86173\AppData\Roaming\Typora\typora-user-images\image-20230708131745739.png" alt="image-20230708131745739"></p>
-<p>感知机接收多个输入信号，输出一个信号。这里所说的“信号”可以想 象成电流或河流那样具备“流动性”的东西。像电流流过导线，向前方输送 电子一样，感知机的信号也会形成流，向前方输送信息。但是，和实际的电 流不同的是，感知机的信号只有“流&#x2F;不 流 ”（ 1&#x2F;0）两种取值。在《深度学习入门：基于Python的理论与实现》中，0 对应“不传递信号”，1对应“传递信号”。</p>
-<p>而$w_1,w_2$是信号的权重，感知机的工作模式可以用以下公式描述。<br>$$<br>y &#x3D;<br>\begin{cases}<br>0, \ w_1x_1+w_2x_2 &lt;&#x3D; \theta \<br>1, \ otherwise<br>\end{cases}</p>
-<p>$$<br>此处的$\theta$应理解为一个阈值。</p>
-]]></content>
-      <tags>
-        <tag>深度学习入门</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Hello World</title>
     <url>/2023/07/08/hello-world/</url>
     <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
@@ -40,6 +19,27 @@
 ]]></content>
       <tags>
         <tag>博客使用说明</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>info</title>
+    <url>/2023/07/08/test/</url>
+    <content><![CDATA[<p>有什么问题可以在评论区留言，或者email联系<a href="mailto:&#x69;&#97;&#x6e;&#x61;&#102;&#112;&#x40;&#x7a;&#x6a;&#117;&#x2e;&#101;&#x64;&#x75;&#x2e;&#x63;&#110;">&#x69;&#97;&#x6e;&#x61;&#102;&#112;&#x40;&#x7a;&#x6a;&#117;&#x2e;&#101;&#x64;&#x75;&#x2e;&#x63;&#110;</a></p>
+]]></content>
+      <tags>
+        <tag>info</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>深度学习入门笔记1</title>
+    <url>/2023/07/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B01/</url>
+    <content><![CDATA[<h2 id="1-感知机"><a href="#1-感知机" class="headerlink" title="1 感知机"></a>1 感知机</h2><p><img src="C:\Users\86173\AppData\Roaming\Typora\typora-user-images\image-20230708131745739.png" alt="image-20230708131745739"></p>
+<p>感知机接收多个输入信号，输出一个信号。这里所说的“信号”可以想 象成电流或河流那样具备“流动性”的东西。像电流流过导线，向前方输送 电子一样，感知机的信号也会形成流，向前方输送信息。但是，和实际的电 流不同的是，感知机的信号只有“流&#x2F;不 流 ”（ 1&#x2F;0）两种取值。在《深度学习入门：基于Python的理论与实现》中，0 对应“不传递信号”，1对应“传递信号”。</p>
+<p>而$w_1,w_2$是信号的权重，感知机的工作模式可以用以下公式描述。<br>$$<br>y &#x3D;<br>\begin{cases}<br>0, \ w_1x_1+w_2x_2 &lt;&#x3D; \theta \<br>1, \ otherwise<br>\end{cases}</p>
+<p>$$<br>此处的$\theta$应理解为一个阈值。</p>
+]]></content>
+      <tags>
+        <tag>深度学习入门</tag>
       </tags>
   </entry>
 </search>
