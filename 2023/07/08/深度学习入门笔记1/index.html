@@ -19,12 +19,12 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"ianafp.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.17.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":{"gitalk":{"order":-1}},"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="1 感知机  感知机接收多个输入信号，输出一个信号。这里所说的“信号”可以想 象成电流或河流那样具备“流动性”的东西。像电流流过导线，向前方输送 电子一样，感知机的信号也会形成流，向前方输送信息。但是，和实际的电 流不同的是，感知机的信号只有“流&#x2F;不 流 ”（ 1&#x2F;0）两种取值。在《深度学习入门：基于Python的理论与实现》中，0 对应“不传递信号”，1对应“传递信号”。 而">
+    <meta name="description" content="本文记录了本人阅读《深度学习入门：基于Python的理论与实现》（斋藤康毅）一书做的一些笔记。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="深度学习入门笔记1">
+<meta property="og:title" content="ianafp&#39;s blog">
 <meta property="og:url" content="https://ianafp.github.io/2023/07/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B01/index.html">
 <meta property="og:site_name" content="ianafp&#39;s blog">
-<meta property="og:description" content="1 感知机  感知机接收多个输入信号，输出一个信号。这里所说的“信号”可以想 象成电流或河流那样具备“流动性”的东西。像电流流过导线，向前方输送 电子一样，感知机的信号也会形成流，向前方输送信息。但是，和实际的电 流不同的是，感知机的信号只有“流&#x2F;不 流 ”（ 1&#x2F;0）两种取值。在《深度学习入门：基于Python的理论与实现》中，0 对应“不传递信号”，1对应“传递信号”。 而">
+<meta property="og:description" content="本文记录了本人阅读《深度学习入门：基于Python的理论与实现》（斋藤康毅）一书做的一些笔记。">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://ianafp.github.io/2023/07/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B01/image-20230708131745739.png">
 <meta property="og:image" content="https://ianafp.github.io/2023/07/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B01/image-20230708160702807.png">
@@ -35,8 +35,28 @@
 <meta property="og:image" content="https://ianafp.github.io/2023/07/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B01/image-20230708162234505.png">
 <meta property="og:image" content="https://ianafp.github.io/2023/07/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B01/image-20230708163116056.png">
 <meta property="og:image" content="https://ianafp.github.io/2023/07/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B01/image-20230708163211477.png">
+<meta property="og:image" content="https://ianafp.github.io/2023/07/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B01/image-20230710144238609.png">
+<meta property="og:image" content="https://ianafp.github.io/2023/07/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B01/image-20230710152529536.png">
+<meta property="og:image" content="https://ianafp.github.io/2023/07/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B01/image-20230710152716600.png">
+<meta property="og:image" content="https://ianafp.github.io/2023/07/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B01/image-20230710153004628.png">
+<meta property="og:image" content="https://ianafp.github.io/2023/07/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B01/image-20230710154633453.png">
+<meta property="og:image" content="https://ianafp.github.io/2023/07/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B01/image-20230710154858929.png">
+<meta property="og:image" content="https://ianafp.github.io/2023/07/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B01/image-20230710154935192.png">
+<meta property="og:image" content="https://ianafp.github.io/2023/07/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B01/image-20230710155735826.png">
+<meta property="og:image" content="https://ianafp.github.io/2023/07/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B01/image-20230710162332961.png">
+<meta property="og:image" content="https://ianafp.github.io/2023/07/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B01/image-20230710162647105.png">
+<meta property="og:image" content="https://ianafp.github.io/2023/07/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B01/image-20230710163237306.png">
+<meta property="og:image" content="https://ianafp.github.io/2023/07/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B01/image-20230710163356084.png">
+<meta property="og:image" content="https://ianafp.github.io/2023/07/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B01/image-20230710165057328.png">
+<meta property="og:image" content="https://ianafp.github.io/2023/07/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B01/image-20230710165211078.png">
+<meta property="og:image" content="https://ianafp.github.io/2023/07/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B01/image-20230710165228579.png">
+<meta property="og:image" content="https://ianafp.github.io/2023/07/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B01/image-20230710165253407.png">
+<meta property="og:image" content="https://ianafp.github.io/2023/07/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B01/image-20230710165406387.png">
+<meta property="og:image" content="https://ianafp.github.io/2023/07/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B01/image-20230710165527994.png">
+<meta property="og:image" content="https://ianafp.github.io/2023/07/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B01/image-20230710165718840.png">
+<meta property="og:image" content="https://ianafp.github.io/2023/07/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B01/image-20230710165725537.png">
 <meta property="article:published_time" content="2023-07-08T07:13:59.000Z">
-<meta property="article:modified_time" content="2023-07-08T08:49:28.001Z">
+<meta property="article:modified_time" content="2023-07-10T09:17:50.545Z">
 <meta property="article:author" content="ianafp">
 <meta property="article:tag" content="深度学习">
 <meta name="twitter:card" content="summary">
@@ -47,10 +67,10 @@
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://ianafp.github.io/2023/07/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B01/","path":"2023/07/08/深度学习入门笔记1/","title":"深度学习入门笔记1"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://ianafp.github.io/2023/07/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B01/","path":"2023/07/08/深度学习入门笔记1/","title":""}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>深度学习入门笔记1 | ianafp's blog</title>
+<title> | ianafp's blog</title>
   
 
 
@@ -149,7 +169,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%84%9F%E7%9F%A5%E6%9C%BA"><span class="nav-number">1.</span> <span class="nav-text">1 感知机</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C"><span class="nav-number">2.</span> <span class="nav-text">2 神经网络</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%B1%82"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 神经网络层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BF%80%E6%B4%BB%E5%87%BD%E6%95%B0"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 激活函数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#sigmod%E5%87%BD%E6%95%B0"><span class="nav-number">2.2.1.</span> <span class="nav-text">2.2.1 sigmod函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%98%B6%E8%B7%83%E5%87%BD%E6%95%B0"><span class="nav-number">2.2.2.</span> <span class="nav-text">2.2.2 阶跃函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#relu"><span class="nav-number">2.2.3.</span> <span class="nav-text">2.2.3 ReLU</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E7%9A%84%E5%86%85%E7%A7%AF"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 神经网络的内积</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E7%9A%84%E5%AD%A6%E4%B9%A0"><span class="nav-number">3.</span> <span class="nav-text">3 神经网络的学习</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%84%9F%E7%9F%A5%E6%9C%BA"><span class="nav-number">1.</span> <span class="nav-text">1 感知机</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C"><span class="nav-number">2.</span> <span class="nav-text">2 神经网络</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%B1%82"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 神经网络层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BF%80%E6%B4%BB%E5%87%BD%E6%95%B0"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 激活函数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#sigmod%E5%87%BD%E6%95%B0"><span class="nav-number">2.2.1.</span> <span class="nav-text">2.2.1 sigmod函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%98%B6%E8%B7%83%E5%87%BD%E6%95%B0"><span class="nav-number">2.2.2.</span> <span class="nav-text">2.2.2 阶跃函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#relu"><span class="nav-number">2.2.3.</span> <span class="nav-text">2.2.3 ReLU</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E7%9A%84%E5%86%85%E7%A7%AF"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 神经网络的内积</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E7%9A%84%E5%AD%A6%E4%B9%A0"><span class="nav-number">3.</span> <span class="nav-text">3 神经网络的学习</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%AD%E7%BB%83%E6%95%B0%E6%8D%AE%E5%92%8C%E6%B5%8B%E8%AF%95%E6%95%B0%E6%8D%AE"><span class="nav-number">3.1.</span> <span class="nav-text">训练数据和测试数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0"><span class="nav-number">3.2.</span> <span class="nav-text">损失函数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9D%87%E6%96%B9%E8%AF%AF%E5%B7%AE"><span class="nav-number">3.2.1.</span> <span class="nav-text">均方误差</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BA%A4%E5%8F%89%E7%86%B5%E8%AF%AF%E5%B7%AE"><span class="nav-number">3.2.2.</span> <span class="nav-text">交叉熵误差</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mini-batch"><span class="nav-number">3.3.</span> <span class="nav-text">mini-batch</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A2%AF%E5%BA%A6%E6%B3%95"><span class="nav-number">3.4.</span> <span class="nav-text">梯度法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">3.5.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%AF%E5%B7%AE%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD%E6%B3%95"><span class="nav-number">4.</span> <span class="nav-text">误差反向传播法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E5%9B%BE"><span class="nav-number">4.1.</span> <span class="nav-text">计算图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%A9%E7%94%A8%E8%AF%AF%E5%B7%AE%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD%E6%B1%82%E5%AF%BC"><span class="nav-number">4.2.</span> <span class="nav-text">利用误差反向传播求导</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%93%BE%E5%BC%8F%E6%B3%95%E5%88%99"><span class="nav-number">4.2.1.</span> <span class="nav-text">链式法则</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8A%A0%E6%B3%95%E8%8A%82%E7%82%B9%E7%9A%84%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD"><span class="nav-number">4.2.2.</span> <span class="nav-text">加法节点的反向传播</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B9%98%E6%B3%95%E8%8A%82%E7%82%B9%E7%9A%84%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD"><span class="nav-number">4.2.3.</span> <span class="nav-text">乘法节点的反向传播</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%9E%E4%BE%8B%E4%BB%A3%E7%A0%81"><span class="nav-number">4.2.4.</span> <span class="nav-text">实例代码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%80%83%E8%99%91%E6%BF%80%E6%B4%BB%E5%B1%82%E7%9A%84%E6%83%85%E5%BD%A2"><span class="nav-number">4.2.5.</span> <span class="nav-text">考虑激活层的情形</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%80%83%E8%99%91affine%E5%B1%82%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="nav-number">4.2.6.</span> <span class="nav-text">考虑Affine层的实现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E8%AF%AF%E5%B7%AE%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD%E6%B3%95%E7%9A%84%E5%AD%A6%E4%B9%A0"><span class="nav-number">4.2.7.</span> <span class="nav-text">使用误差反向传播法的学习</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C"><span class="nav-number">5.</span> <span class="nav-text">卷积神经网络</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B4%E4%BD%93%E7%BB%93%E6%9E%84"><span class="nav-number">5.1.</span> <span class="nav-text">整体结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%B7%E7%A7%AF%E8%BF%90%E7%AE%97"><span class="nav-number">5.2.</span> <span class="nav-text">卷积运算</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A1%AB%E5%85%85"><span class="nav-number">5.2.1.</span> <span class="nav-text">填充</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%AD%A5%E5%B9%85"><span class="nav-number">5.2.2.</span> <span class="nav-text">步幅</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A4%9A%E7%BB%B4%E6%95%B0%E6%8D%AE%E7%9A%84%E5%8D%B7%E7%A7%AF%E8%BF%90%E7%AE%97"><span class="nav-number">5.2.3.</span> <span class="nav-text">多维数据的卷积运算</span></a></li></ol></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -208,12 +228,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="深度学习入门笔记1 | ianafp's blog">
+      <meta itemprop="name" content=" | ianafp's blog">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          深度学习入门笔记1
+          
         </h1>
 
         <div class="post-meta-container">
@@ -223,9 +243,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2023-07-08 15:13:59 / 修改时间：16:49:28" itemprop="dateCreated datePublished" datetime="2023-07-08T15:13:59+08:00">2023-07-08</time>
+      <time title="创建时间：2023-07-08 15:13:59" itemprop="dateCreated datePublished" datetime="2023-07-08T15:13:59+08:00">2023-07-08</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-07-10 17:17:50" itemprop="dateModified" datetime="2023-07-10T17:17:50+08:00">2023-07-10</time>
     </span>
 
   
@@ -238,6 +264,8 @@
     
     
     <div class="post-body" itemprop="articleBody"><hr>
+<p>本文记录了本人阅读《深度学习入门：基于Python的理论与实现》（斋藤康毅）一书做的一些笔记。</p>
+<span id="more"></span>
 <h2 id="感知机">1 感知机</h2>
 <p><img src="/2023/07/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B01/image-20230708131745739.png"></p>
 <p>感知机接收多个输入信号，输出一个信号。这里所说的“信号”可以想
@@ -327,6 +355,214 @@ x, x\ge 0 \\
 <h2 id="神经网络的学习">3 神经网络的学习</h2>
 <p>前面介绍了神经网络的工作模式，不难看出，保证神经网络正确工作（完成识别，分类等任务）的关键在于权重和神经元的数量。</p>
 <p>神经网络的关键点就在于如何从数据中学习，获得正确的参数。</p>
+<h3 id="训练数据和测试数据">训练数据和测试数据</h3>
+<p>机器学习中，一般将数据分为训练数据和测试数据两部分来进行学习和
+实验等。首先，使用训练数据进行学习，寻找最优的参数；然后，使用测试
+数据评价训练得到的模型的实际能力。</p>
+<p>为什么需要将数据分为训练数据和测
+试数据呢？因为我们追求的是模型的泛化能力。为了正确评价模型的泛化能
+力，就必须划分训练数据和测试数据。另外，训练数据也可以称为监督数据。</p>
+<p>仅仅用一个数据集去学习和评价参数，是无法进行正确评价的。
+这样会导致可以顺利地处理某个数据集，但无法处理其他数据集的情况。顺
+便说一下，只对某个数据集过度拟合的状态称为过拟合（over fitting）。</p>
+<h3 id="损失函数">损失函数</h3>
+<p>损失函数(loss
+function)描述的是神经网络性能的恶劣程度,一般使用均方误差和交叉熵。</p>
+<h4 id="均方误差">均方误差</h4>
+<p><span class="math display">\[
+E = \frac{1}{2}\sum_k(y_k-t_k)^2
+\]</span></p>
+<p>其中,<span class="math inline">\(y_k,t_k\)</span>分别表示神经网络的输出，监督数据，神经网络的输出和监督数据的差异的均方体现为均方误差。</p>
+<h4 id="交叉熵误差">交叉熵误差</h4>
+<p><span class="math display">\[
+E = - \sum _k t_k\log y_k
+\]</span></p>
+<p>采用交叉熵策略的道理是一般监督数据<span class="math inline">\(t_k\)</span>往往采用独热码(one
+hot)，因此在正确标签的位是1，其余为0。</p>
+<p>因此交叉熵误差事实上是测试的是在监督数据输出为正确的情况下，神经网络输出的误差。</p>
+<figure>
+<img src="/2023/07/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B01/image-20230710144238609.png" alt="image-20230710144238609">
+<figcaption aria-hidden="true">image-20230710144238609</figcaption>
+</figure>
+<p>根据自然对数图像，很自然地，神经网络输出值越接近1（即正确值），交叉熵误差就越小。</p>
+<h3 id="mini-batch">mini-batch</h3>
+<p>使用mini-batch的理由很自然，神经网络的训练数据集往往规模巨大，如果以全部数据为对象计算损失函数是成本巨大的。</p>
+<p>因此我们往往从数据集中选出一部分来作为全部数据的近似，称为mini-batch,即小批量。</p>
+<h3 id="梯度法">梯度法</h3>
+<p>关于函数，导数，偏导数，数值微分，梯度的概念自行查阅微积分资料。</p>
+<p>机器学习的主要任务就是在学习时寻找最优参数（权重和偏置）</p>
+<p>我们可以将神经网络的损失函数<span class="math inline">\(L\)</span>看作是关于权重的多元函数. <span class="math display">\[
+L = f(w_1,w_2,...,w_n)
+\]</span> 一般而言，神经网络参数空间巨大，<span class="math inline">\(L\)</span>
+往往无法得到解析的表示，而我们只需要得到<span class="math inline">\(L\)</span>的极小值点就可以达到优化的目的，我们认为<span class="math inline">\(L\)</span> 关于参数空间是连续且可微。</p>
+<p>那么我们可以利用数值微分的方法得到<span class="math inline">\(L\)</span>关于某参数<span class="math inline">\(w_k\)</span> 的数值微分 <span class="math display">\[
+\frac{\partial L}{\partial w_k} = \frac{L(w_k+\delta)-L(w_k)}{\delta}
+\]</span> 进而我们得到L的梯度 <span class="math display">\[
+grad(L) = (\frac{\partial L}{\partial w_1},\frac{\partial L}{\partial
+w_2},\frac{\partial L}{\partial w_3},...,\frac{\partial L}{\partial
+w_n})
+\]</span> 利用梯度下降进行优化的迭代步骤如下: <span class="math display">\[
+W = W-\eta \frac{\partial L}{\partial W}
+\]</span> 其中<span class="math inline">\(\eta\)</span>为学习率，即权重向梯度方向迭代的步长。</p>
+<h3 id="总结">总结</h3>
+<p>总结神经网络的学习算法，步骤如下：</p>
+<ol type="1">
+<li>mini-batch</li>
+<li>计算梯度</li>
+<li>更新参数</li>
+<li>重复步骤1，2，3到阈值</li>
+</ol>
+<p>由于使用的数据是随机的mini-batch数据，因此上述方法又称为随机梯度下降法。</p>
+<h2 id="误差反向传播法">误差反向传播法</h2>
+<h3 id="计算图">计算图</h3>
+<figure>
+<img src="/2023/07/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B01/image-20230710152529536.png" alt="image-20230710152529536">
+<figcaption aria-hidden="true">image-20230710152529536</figcaption>
+</figure>
+<p>这是一个最简单的计算图，描述的是买苹果的过程中，在苹果数量，单价，消费税三者作用下如何得到最终开销。</p>
+<p>使用计算图描述计算过程的好处一是能够进行局部计算，二是能够通过误差反向传播法求导数。</p>
+<h3 id="利用误差反向传播求导">利用误差反向传播求导</h3>
+<figure>
+<img src="/2023/07/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B01/image-20230710152716600.png" alt="image-20230710152716600">
+<figcaption aria-hidden="true">image-20230710152716600</figcaption>
+</figure>
+<p>上图是一个用误差反向传播求出导数的例子（苹果的单价，总价对最终价格影响的贡献）。</p>
+<h4 id="链式法则">链式法则</h4>
+<p>利用计算图进行反向传播计算导数的过程是从右向左传递，与我们日常接触的计算恰恰相反。</p>
+<p>传递导数的原理在于<strong>链式法则</strong>。</p>
+<figure>
+<img src="/2023/07/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B01/image-20230710153004628.png" alt="image-20230710153004628">
+<figcaption aria-hidden="true">image-20230710153004628</figcaption>
+</figure>
+<p>假设存在<span class="math inline">\(y=f(x)\)</span>的计算，反向传播如上图所示。</p>
+<p><span class="math inline">\(E\)</span>信号是右侧传来的信号，乘以<span class="math inline">\(f\)</span>节点的局部导数<span class="math inline">\(\frac{\partial y}{\partial x}\)</span>
+后作为新的导数信号向左侧传递。</p>
+<p>事实上可以看出反向传播的过程遵循链式法则。</p>
+<p>即<span class="math inline">\(z = f(t),t=f(x)\)</span>,那么$ = $</p>
+<p>链式法则是复合函数求导的性质，具体查阅微积分教材。</p>
+<figure>
+<img src="/2023/07/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B01/image-20230710154633453.png" alt="image-20230710154633453">
+<figcaption aria-hidden="true">image-20230710154633453</figcaption>
+</figure>
+<p>使用链式法则表示的计算图过程如上。</p>
+<h4 id="加法节点的反向传播">加法节点的反向传播</h4>
+<p>以<span class="math inline">\(z = x+y\)</span>为对象，那么<span class="math inline">\(\frac{\partial z}{\partial x} = \frac{\partial
+z}{\partial y} = 1\)</span></p>
+<figure>
+<img src="/2023/07/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B01/image-20230710154858929.png" alt="image-20230710154858929">
+<figcaption aria-hidden="true">image-20230710154858929</figcaption>
+</figure>
+<h4 id="乘法节点的反向传播">乘法节点的反向传播</h4>
+<p>以<span class="math inline">\(z = xy\)</span>为对象，那么<span class="math inline">\(\frac{\partial z}{\partial x} =y, \frac{\partial
+z}{\partial y} = x\)</span></p>
+<figure>
+<img src="/2023/07/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B01/image-20230710154935192.png" alt="image-20230710154935192">
+<figcaption aria-hidden="true">image-20230710154935192</figcaption>
+</figure>
+<h4 id="实例代码">实例代码</h4>
+<p>有反向传播机制的加法层和乘法层。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">AddLayer</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x, y</span>):</span><br><span class="line">        out = x + y</span><br><span class="line">        <span class="keyword">return</span> out</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">backward</span>(<span class="params">self, dout</span>):</span><br><span class="line">        dx = dout * <span class="number">1</span></span><br><span class="line">        dy = dout * <span class="number">1</span></span><br><span class="line">        <span class="keyword">return</span> dx, dy</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">MulLayer</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        self.x = <span class="literal">None</span></span><br><span class="line">        self.y = <span class="literal">None</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x, y</span>):</span><br><span class="line">        self.x = x</span><br><span class="line">        self.y = y</span><br><span class="line">        out = x * y</span><br><span class="line">        <span class="keyword">return</span> out</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">backward</span>(<span class="params">self, dout</span>):</span><br><span class="line">        dx = dout * self.y <span class="comment"># 翻转x和y</span></span><br><span class="line">        dy = dout * self.x</span><br><span class="line">        <span class="keyword">return</span> dx, dy</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h4 id="考虑激活层的情形">考虑激活层的情形</h4>
+<p>考虑ReLU <span class="math display">\[
+y=\begin{cases}
+x, x&gt;0 \\
+0, x\le 0
+\end{cases}
+\]</span> 那么， <span class="math display">\[
+\frac{\partial y}{\partial x} = \begin{cases}
+1, x&gt;0 \\
+0, x\le 0
+\end{cases}
+\]</span> 对于sigmoid, <span class="math display">\[
+y = \frac{1}{1+e^{-x}} \\
+\frac{dy}{dx} = - (\frac{1}{1+e^{-x}})^2 \cdot (-e^{-x}) =
+\frac{e^{-x}}{(1+e^{-x})^2} = y(1-y)
+\]</span> <img src="/2023/07/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B01/image-20230710155735826.png" alt="image-20230710155735826"></p>
+<h4 id="考虑affine层的实现">考虑Affine层的实现</h4>
+<figure>
+<img src="/2023/07/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B01/image-20230710162332961.png" alt="image-20230710162332961">
+<figcaption aria-hidden="true">image-20230710162332961</figcaption>
+</figure>
+<p>Affine层实际上就是考虑了矩阵运算的清醒，事实上对于矩阵运算的反向传播，有下式
+<span class="math display">\[
+\frac{\partial L}{\partial X} = \frac{\partial L}{\partial Y} \cdot W^T
+\\
+\frac{\partial L}{\partial W} = X^T \cdot \frac{\partial L}{\partial Y}
+\]</span> <img src="/2023/07/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B01/image-20230710162647105.png" alt="image-20230710162647105"></p>
+<h4 id="使用误差反向传播法的学习">使用误差反向传播法的学习</h4>
+<p>两层神经网络层的实现</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">TwoLayerNet</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, input_size, hidden_size, output_size,</span></span><br><span class="line"><span class="params">                 weight_init_std=<span class="number">0.01</span></span>):</span><br><span class="line">        <span class="comment"># 初始化权重</span></span><br><span class="line">        self.params = &#123;&#125;</span><br><span class="line">        self.params[<span class="string">&#x27;W1&#x27;</span>] = weight_init_std * \</span><br><span class="line">                            np.random.randn(input_size, hidden_size)</span><br><span class="line">        self.params[<span class="string">&#x27;b1&#x27;</span>] = np.zeros(hidden_size)</span><br><span class="line">        self.params[<span class="string">&#x27;W2&#x27;</span>] = weight_init_std * \</span><br><span class="line">                            np.random.randn(hidden_size, output_size)</span><br><span class="line">        self.params[<span class="string">&#x27;b2&#x27;</span>] = np.zeros(output_size)</span><br><span class="line">        <span class="comment"># 生成层</span></span><br><span class="line">        self.layers = OrderedDict()</span><br><span class="line">        self.layers[<span class="string">&#x27;Affine1&#x27;</span>] = \</span><br><span class="line">            Affine(self.params[<span class="string">&#x27;W1&#x27;</span>], self.params[<span class="string">&#x27;b1&#x27;</span>])</span><br><span class="line">        self.layers[<span class="string">&#x27;Relu1&#x27;</span>] = Relu()</span><br><span class="line">        self.layers[<span class="string">&#x27;Affine2&#x27;</span>] = \</span><br><span class="line">            Affine(self.params[<span class="string">&#x27;W2&#x27;</span>], self.params[<span class="string">&#x27;b2&#x27;</span>])</span><br><span class="line">        self.lastLayer = SoftmaxWithLoss()</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">predict</span>(<span class="params">self, x</span>):</span><br><span class="line">        <span class="keyword">for</span> layer <span class="keyword">in</span> self.layers.values():</span><br><span class="line">            x = layer.forward(x)</span><br><span class="line">        <span class="keyword">return</span> x</span><br><span class="line">    <span class="comment"># x: 输入数据, t:监督数据</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">loss</span>(<span class="params">self, x, t</span>):</span><br><span class="line">        y = self.predict(x)</span><br><span class="line">        <span class="keyword">return</span> self.lastLayer.forward(y, t)</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">accuracy</span>(<span class="params">self, x, t</span>):</span><br><span class="line">        y = self.predict(x)</span><br><span class="line">        y = np.argmax(y, axis=<span class="number">1</span>)</span><br><span class="line">        <span class="keyword">if</span> t.ndim != <span class="number">1</span> : t = np.argmax(t, axis=<span class="number">1</span>)</span><br><span class="line">accuracy = np.<span class="built_in">sum</span>(y == t) / <span class="built_in">float</span>(x.shape[<span class="number">0</span>])</span><br><span class="line">        <span class="keyword">return</span> accuracy</span><br><span class="line">    <span class="comment"># x: 输入数据, t:监督数据</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">numerical_gradient</span>(<span class="params">self, x, t</span>):</span><br><span class="line">        loss_W = <span class="keyword">lambda</span> W: self.loss(x, t)</span><br><span class="line">        grads = &#123;&#125;</span><br><span class="line">        grads[<span class="string">&#x27;W1&#x27;</span>] = numerical_gradient(loss_W, self.params[<span class="string">&#x27;W1&#x27;</span>])</span><br><span class="line">        grads[<span class="string">&#x27;b1&#x27;</span>] = numerical_gradient(loss_W, self.params[<span class="string">&#x27;b1&#x27;</span>])</span><br><span class="line">        grads[<span class="string">&#x27;W2&#x27;</span>] = numerical_gradient(loss_W, self.params[<span class="string">&#x27;W2&#x27;</span>])</span><br><span class="line">        grads[<span class="string">&#x27;b2&#x27;</span>] = numerical_gradient(loss_W, self.params[<span class="string">&#x27;b2&#x27;</span>])</span><br><span class="line">        <span class="keyword">return</span> grads</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">gradient</span>(<span class="params">self, x, t</span>):</span><br><span class="line">        <span class="comment"># forward</span></span><br><span class="line">        self.loss(x, t)</span><br><span class="line">        <span class="comment"># backward</span></span><br><span class="line">        dout = <span class="number">1</span></span><br><span class="line">        dout = self.lastLayer.backward(dout)</span><br><span class="line">        layers = <span class="built_in">list</span>(self.layers.values())</span><br><span class="line">        layers.reverse()</span><br><span class="line">        <span class="keyword">for</span> layer <span class="keyword">in</span> layers:</span><br><span class="line">            dout = layer.backward(dout)</span><br><span class="line">        <span class="comment">#设定 </span></span><br><span class="line">        grads = &#123;&#125;</span><br><span class="line">        grads[<span class="string">&#x27;W1&#x27;</span>] = self.layers[<span class="string">&#x27;Affine1&#x27;</span>].dW</span><br><span class="line">        grads[<span class="string">&#x27;b1&#x27;</span>] = self.layers[<span class="string">&#x27;Affine1&#x27;</span>].db</span><br><span class="line">        grads[<span class="string">&#x27;W2&#x27;</span>] = self.layers[<span class="string">&#x27;Affine2&#x27;</span>].dW</span><br><span class="line">        grads[<span class="string">&#x27;b2&#x27;</span>] = self.layers[<span class="string">&#x27;Affine2&#x27;</span>].db</span><br><span class="line">        <span class="keyword">return</span> grads</span><br></pre></td></tr></table></figure>
+<p>将前文中利用梯度下降求梯度的方法替换为使用误差反向传播。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> sys, os</span><br><span class="line"> sys.path.append(os.pardir)</span><br><span class="line"> <span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"> <span class="keyword">from</span> dataset.mnist <span class="keyword">import</span> load_mnist</span><br><span class="line"> <span class="keyword">from</span> two_layer_net <span class="keyword">import</span> TwoLayerNet</span><br><span class="line"> <span class="comment"># 读入数据</span></span><br><span class="line">(x_train, t_train), (x_test, t_test) = \</span><br><span class="line">    load_mnist(normalize=<span class="literal">True</span>, one_hot_label=<span class="literal">True</span>)</span><br><span class="line"> network = TwoLayerNet(input_size=<span class="number">784</span>, hidden_size=<span class="number">50</span>, output_size=<span class="number">10</span>)</span><br><span class="line"> iters_num = <span class="number">10000</span></span><br><span class="line"> train_size = x_train.shape[<span class="number">0</span>]</span><br><span class="line"> batch_size = <span class="number">100</span></span><br><span class="line"> learning_rate = <span class="number">0.1</span></span><br><span class="line"> train_loss_list = []</span><br><span class="line"> train_acc_list = []</span><br><span class="line"> test_acc_list = []</span><br><span class="line"> iter_per_epoch = <span class="built_in">max</span>(train_size / batch_size, <span class="number">1</span>)</span><br><span class="line"> <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(iters_num):</span><br><span class="line">    batch_mask = np.random.choice(train_size, batch_size)</span><br><span class="line">    x_batch = x_train[batch_mask]</span><br><span class="line">    t_batch = t_train[batch_mask]</span><br><span class="line">    <span class="comment"># 通过误差反向传播法求梯度</span></span><br><span class="line">	grad = network.gradient(x_batch, t_batch)</span><br><span class="line">    <span class="comment"># 更新</span></span><br><span class="line">    <span class="keyword">for</span> key <span class="keyword">in</span> (<span class="string">&#x27;W1&#x27;</span>, <span class="string">&#x27;b1&#x27;</span>, <span class="string">&#x27;W2&#x27;</span>, <span class="string">&#x27;b2&#x27;</span>):</span><br><span class="line">        network.params[key] -= learning_rate * grad[key]</span><br><span class="line">    loss = network.loss(x_batch, t_batch)</span><br><span class="line">    train_loss_list.append(loss)</span><br><span class="line">    <span class="keyword">if</span> i % iter_per_epoch == <span class="number">0</span>:</span><br><span class="line">        train_acc = network.accuracy(x_train, t_train)</span><br><span class="line">        test_acc = network.accuracy(x_test, t_test)</span><br><span class="line">        train_acc_list.append(train_acc)</span><br><span class="line">        test_acc_list.append(test_acc)</span><br><span class="line">        <span class="built_in">print</span>(train_acc, test_acc)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="卷积神经网络">卷积神经网络</h2>
+<p>卷积神经网络即CNN，(Convolutional Neural Network)</p>
+<p>常常用于图像识别，语音识别等场合。</p>
+<h3 id="整体结构">整体结构</h3>
+<p>CNN结构和之前的神经网络结构类似，但是出现了卷积层(convolutional)和池化层(pooling)。</p>
+<figure>
+<img src="/2023/07/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B01/image-20230710163237306.png" alt="image-20230710163237306">
+<figcaption aria-hidden="true">image-20230710163237306</figcaption>
+</figure>
+<p>相邻神经元都有连接的结构称为全连接结构，上图在Affine层实现了全连接。</p>
+<p>那么在CNN中增加了卷积层和池化层后则如下图所示。</p>
+<figure>
+<img src="/2023/07/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B01/image-20230710163356084.png" alt="image-20230710163356084">
+<figcaption aria-hidden="true">image-20230710163356084</figcaption>
+</figure>
+<h3 id="卷积运算">卷积运算</h3>
+<p>全连接层存在的问题就是全连接层输入时将多维数据拉成一维数据，损失了输入的形状信息，而卷积层则是在保留输入形状信息的基础上进行运算的。</p>
+<p>而卷积层可以保持形状不变。当输入数据是图像时，卷积层会以3维
+数据的形式接收输入数据，并同样以3维数据的形式输出至下一层。因此，
+在CNN中，可以（有可能）正确理解图像等具有形状的数据。</p>
+<p>另外，CNN中，有时将卷积层的输入输出数据称为特征图（feature
+map）。其中，卷积层的输入数据称为输入特征图（input feature map）， 输 出
+数据称为输出特征图（output feature map）。本书中将“输入输出数据”和“特
+征图”作为含义相同的词使用。</p>
+<figure>
+<img src="/2023/07/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B01/image-20230710165057328.png" alt="image-20230710165057328">
+<figcaption aria-hidden="true">image-20230710165057328</figcaption>
+</figure>
+<p>上图是一个卷积运算的例子。</p>
+<p>卷积运算事实上是滤波器（也称卷积核）与输入数据各个位置上对应元素相乘再相加。</p>
+<figure>
+<img src="/2023/07/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B01/image-20230710165211078.png" alt="image-20230710165211078">
+<figcaption aria-hidden="true">image-20230710165211078</figcaption>
+</figure>
+<figure>
+<img src="/2023/07/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B01/image-20230710165228579.png" alt="image-20230710165228579">
+<figcaption aria-hidden="true">image-20230710165228579</figcaption>
+</figure>
+<p>对于偏置，对所有元素进行偏置。</p>
+<figure>
+<img src="/2023/07/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B01/image-20230710165253407.png" alt="image-20230710165253407">
+<figcaption aria-hidden="true">image-20230710165253407</figcaption>
+</figure>
+<h4 id="填充">填充</h4>
+<p>为了控制卷积生成的形状，我们常常要对输入数据先进行填充。</p>
+<figure>
+<img src="/2023/07/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B01/image-20230710165406387.png" alt="image-20230710165406387">
+<figcaption aria-hidden="true">image-20230710165406387</figcaption>
+</figure>
+<h4 id="步幅">步幅</h4>
+<p>卷积核在输入数据上移动的步长称为步幅，步幅越大，卷积输出的规模越小。</p>
+<figure>
+<img src="/2023/07/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B01/image-20230710165527994.png" alt="image-20230710165527994">
+<figcaption aria-hidden="true">image-20230710165527994</figcaption>
+</figure>
+<h4 id="多维数据的卷积运算">多维数据的卷积运算</h4>
+<p>这里以3通道的数据为例，
+展示了卷积运算的结果。和2维数据时相比，可以发现纵深
+方向（通道方向）上特征图增加了。通道方向上有多个特征图时，会按通道
+进行输入数据和滤波器的卷积运算，并将结果相加，从而得到输出。</p>
+<figure>
+<img src="/2023/07/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B01/image-20230710165718840.png" alt="image-20230710165718840">
+<figcaption aria-hidden="true">image-20230710165718840</figcaption>
+</figure>
+<figure>
+<img src="/2023/07/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B01/image-20230710165725537.png" alt="image-20230710165725537">
+<figcaption aria-hidden="true">image-20230710165725537</figcaption>
+</figure>
 
     </div>
 
