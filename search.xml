@@ -27,6 +27,92 @@ you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p
       </tags>
   </entry>
   <entry>
+    <title>pytorch入门笔记1</title>
+    <url>/2023/07/11/pytorch%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B01/</url>
+    <content><![CDATA[<p>本文是一篇pytorch入门笔记，主要讲了Pytorch环境配置和基本数据类型。
+<span id="more"></span> ## pytorch的安装</p>
+<h3 id="更新cuda驱动">更新cuda驱动</h3>
+<p>到<a href="https://www.nvidia.cn/geforce/drivers/">N卡驱动程序官网</a>下载驱动更新程序</p>
+<p>可选择自动下载或者手动下载</p>
+<figure>
+<img src="/2023/07/11/pytorch%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B01/image-20230711105656694.png" alt="image-20230711105656694">
+<figcaption aria-hidden="true">image-20230711105656694</figcaption>
+</figure>
+<p>以自动更新程序为例，在驱动程序页面完成更新即可</p>
+<figure>
+<img src="/2023/07/11/pytorch%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B01/image-20230711105745926.png" alt="image-20230711105745926">
+<figcaption aria-hidden="true">image-20230711105745926</figcaption>
+</figure>
+<p>更新完成后，查看N卡设置</p>
+<figure>
+<img src="/2023/07/11/pytorch%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B01/image-20230711105810959.png" alt="image-20230711105810959">
+<figcaption aria-hidden="true">image-20230711105810959</figcaption>
+</figure>
+<figure>
+<img src="/2023/07/11/pytorch%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B01/image-20230711105844840.png" alt="image-20230711105844840">
+<figcaption aria-hidden="true">image-20230711105844840</figcaption>
+</figure>
+<p>发现CUDA版本已经更新到12.2.19</p>
+<h3 id="下载pytorch">下载pytorch</h3>
+<p>在安装了conda的情况下，在命令行输入(windows下powershell需要开管理员权限)</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">conda install pytorch torchvision torchaudio pytorch-cuda=11.8 -c pytorch -c nvidia</span><br></pre></td></tr></table></figure>
+<p>在ipython中验证pytorch是否正确安装</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">Python 3.10.9 | packaged by Anaconda, Inc. | (main, Mar  1 2023, 18:18:15) [MSC v.1916 64 bit (AMD64)] on win32</span><br><span class="line">Type <span class="string">&quot;help&quot;</span>, <span class="string">&quot;copyright&quot;</span>, <span class="string">&quot;credits&quot;</span> or <span class="string">&quot;license&quot;</span> <span class="keyword">for</span> more information.</span><br><span class="line">&gt;&gt;&gt; import torch</span><br><span class="line">&gt;&gt;&gt; x = torch.rand(5,3)</span><br><span class="line">&gt;&gt;&gt; <span class="built_in">print</span>(x)</span><br><span class="line">tensor([[0.4660, 0.0961, 0.7834],</span><br><span class="line">        [0.3614, 0.2262, 0.8813],</span><br><span class="line">        [0.9523, 0.8653, 0.2905],</span><br><span class="line">        [0.4628, 0.0707, 0.6660],</span><br><span class="line">        [0.4278, 0.7403, 0.2035]])</span><br><span class="line">&gt;&gt;&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="为conda环境配置pytorch">为conda环境配置pytorch</h3>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">conda create -n MyEnv pytorch</span><br><span class="line">conda activate MyEnv</span><br></pre></td></tr></table></figure>
+<figure>
+<img src="/2023/07/11/pytorch%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B01/image-20230711152214412.png" alt="image-20230711152214412">
+<figcaption aria-hidden="true">image-20230711152214412</figcaption>
+</figure>
+<p>使用jupyter notebook进行验证。</p>
+<h2 id="pytorch的基本使用">pytorch的基本使用</h2>
+<p>详情请见<a herf="https://pytorch.org/docs/stable/torch.html">pytorch官方文档</a></p>
+<h3 id="张量tensors">张量(Tensors)</h3>
+<p>pytorch一大作用是替换numpy，使用张量（tensors)替代numpy的多维数组(ndarrays),前者的优势是可以部署到GPU上来加速向量运算。</p>
+<p>必须使用的库是torch</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br></pre></td></tr></table></figure>
+<h4 id="定义张量">定义张量</h4>
+<p>用法和numpy.rand,empty,zeros类似</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">torch.rand() </span><br><span class="line">torch.empty() <span class="comment"># torch.new_empty()</span></span><br><span class="line">torch.zeros() <span class="comment"># torch.new_zeros()</span></span><br><span class="line">torch.ones() <span class="comment"># torch.new_ones()</span></span><br></pre></td></tr></table></figure>
+<p>可以将python list,numpy ndarray转为tensor</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">torch.tensor([[<span class="number">1.</span>, -<span class="number">1.</span>], [<span class="number">1.</span>, -<span class="number">1.</span>]])</span><br><span class="line">torch.tensor(np.array([[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>], [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>]]))</span><br></pre></td></tr></table></figure>
+<p>利用原有张量形状创建张量</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">torch.randn_like(old_tensor,dtype=...)</span><br></pre></td></tr></table></figure>
+<h4 id="张量运算">张量运算</h4>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line">A = torch.tensor([[<span class="number">1</span>,<span class="number">2</span>],[<span class="number">3</span>,<span class="number">4</span>]])</span><br><span class="line">B = torch.tensor([[<span class="number">3</span>,<span class="number">5</span>],[<span class="number">9</span>,<span class="number">11</span>]])</span><br><span class="line"><span class="built_in">print</span>(A,B)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>​ tensor([[1, 2], ​ [3, 4]]) tensor([[ 3, 5], ​ [ 9, 11]]) ​</p>
+<h4 id="张量运算-1">张量运算</h4>
+<h5 id="加法">加法</h5>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 加法</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;user operator + &#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(A+B)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;user add(tensor1,tensor2,[out = tensor3])&#x27;</span>)</span><br><span class="line">C = torch.empty_like(A)</span><br><span class="line"><span class="built_in">print</span>(torch.add(A,B,out = C))</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;output C&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(C)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;A.add(B)&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(A.add(B))</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;oprand after add&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(A,B)</span><br></pre></td></tr></table></figure>
+<p>​ user operator + ​ tensor([[ 4, 7], ​ [12, 15]]) ​ user
+add(tensor1,tensor2,[out = tensor3]) ​ tensor([[ 4, 7], ​ [12, 15]]) ​
+output C ​ tensor([[ 4, 7], ​ [12, 15]]) ​ A.add(B) ​ tensor([[ 4, 7], ​ [12,
+15]]) ​ oprand after add ​ tensor([[1, 2], ​ [3, 4]]) tensor([[ 3, 5], ​ [
+9, 11]]) ​</p>
+<h4 id="cuda张量">cuda张量</h4>
+<p>tensor可以通过.to方法部署到不同的计算设备上</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> torch.cuda.is_available():</span><br><span class="line">    device = torch.device(<span class="string">&quot;cuda&quot;</span>)          <span class="comment"># 定义一个 CUDA 设备对象</span></span><br><span class="line">    y = torch.ones_like(A, device=device)  <span class="comment"># 显示创建在 GPU 上的一个 tensor</span></span><br><span class="line">    x = y.to(device)                       <span class="comment"># 也可以采用 .to(&quot;cuda&quot;) </span></span><br><span class="line">    z = x + y</span><br><span class="line">    <span class="built_in">print</span>(z)</span><br><span class="line">    <span class="built_in">print</span>(z.to(<span class="string">&quot;cpu&quot;</span>, torch.double))       <span class="comment"># .to() 方法也可以改变数值类型</span></span><br></pre></td></tr></table></figure>
+<h3 id="梯度grad">梯度(grad)</h3>
+<p>梯度的概念是机器学习中的重中之重。</p>
+<p>在pytorch中，pytorch中的autograd库提供了对tensor所有运算自动跟踪计算梯度的功能。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line">A = torch.rand(<span class="number">3</span>,<span class="number">3</span>,requires_grad=<span class="literal">True</span>)</span><br><span class="line"><span class="built_in">print</span>(A)</span><br><span class="line">B = A + <span class="number">2</span></span><br><span class="line"><span class="built_in">print</span>(B)</span><br><span class="line">C= B*B*<span class="number">3</span></span><br><span class="line"><span class="built_in">print</span>(C)</span><br></pre></td></tr></table></figure>
+<p>运行结果：</p>
+<figure>
+<img src="/2023/07/11/pytorch%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B01/image-20230711162307175.png" alt="image-20230711162307175">
+<figcaption aria-hidden="true">image-20230711162307175</figcaption>
+</figure>
+<p>使用backward方法使用反向传播计算A张量的梯度</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">out = C.mean()</span><br><span class="line"><span class="built_in">print</span>(out)</span><br><span class="line">out.backward()</span><br><span class="line"><span class="built_in">print</span>(A.grad)</span><br></pre></td></tr></table></figure>
+<figure>
+<img src="/2023/07/11/pytorch%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B01/image-20230711162845636.png" alt="image-20230711162845636">
+<figcaption aria-hidden="true">image-20230711162845636</figcaption>
+</figure>
+]]></content>
+      <tags>
+        <tag>pytorch</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>info</title>
     <url>/2023/07/08/test/</url>
     <content><![CDATA[<p>有什么问题可以在评论区留言，或者email联系ianafp@zju.edu.cn</p>
