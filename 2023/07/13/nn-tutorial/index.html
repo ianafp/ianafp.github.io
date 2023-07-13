@@ -19,15 +19,15 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"ianafp.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.17.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":{"gitalk":{"order":-1}},"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="123# For tips on running notebooks in Google Colab, see# https:&#x2F;&#x2F;pytorch.org&#x2F;tutorials&#x2F;beginner&#x2F;colab%matplotlib inline 这篇文章是官网上的一篇jupyter notebook, 主要讲了pytorch学习的工作原理，以及如何一步步从手动训练模型到使用pytorch高度抽象化地">
+    <meta name="description" content="这篇文章是官网上的一篇jupyter notebook, 主要讲了pytorch学习的工作原理，以及如何一步步从手动训练模型到使用pytorch高度抽象化地训练模型。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="nn_tutorial">
 <meta property="og:url" content="https://ianafp.github.io/2023/07/13/nn-tutorial/index.html">
 <meta property="og:site_name" content="ianafp&#39;s blog">
-<meta property="og:description" content="123# For tips on running notebooks in Google Colab, see# https:&#x2F;&#x2F;pytorch.org&#x2F;tutorials&#x2F;beginner&#x2F;colab%matplotlib inline 这篇文章是官网上的一篇jupyter notebook, 主要讲了pytorch学习的工作原理，以及如何一步步从手动训练模型到使用pytorch高度抽象化地">
+<meta property="og:description" content="这篇文章是官网上的一篇jupyter notebook, 主要讲了pytorch学习的工作原理，以及如何一步步从手动训练模型到使用pytorch高度抽象化地训练模型。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2023-07-13T08:30:18.000Z">
-<meta property="article:modified_time" content="2023-07-13T08:32:00.640Z">
+<meta property="article:modified_time" content="2023-07-13T08:32:43.962Z">
 <meta property="article:author" content="ianafp">
 <meta property="article:tag" content="pytorch">
 <meta name="twitter:card" content="summary">
@@ -139,18 +139,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#what-is-torch.nn-really"><span class="nav-number">1.</span> <span class="nav-text">What is torch.nn
-really?</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#mnist-data-setup"><span class="nav-number">1.1.</span> <span class="nav-text">MNIST data setup</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#neural-net-from-scratch-without-torch.nn"><span class="nav-number">1.2.</span> <span class="nav-text">Neural net from
-scratch (without torch.nn)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link"><span class="nav-number">1.2.0.1.</span> <span class="nav-text">
-Note
-</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#using-torch.nn.functional"><span class="nav-number">1.3.</span> <span class="nav-text">Using
-torch.nn.functional</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#refactor-using-nn.module"><span class="nav-number">1.4.</span> <span class="nav-text">Refactor using
-nn.Module</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link"><span class="nav-number">1.4.0.1.</span> <span class="nav-text">
-Note
-</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#refactor-using-nn.linear"><span class="nav-number">1.5.</span> <span class="nav-text">Refactor using
-nn.Linear</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#refactor-using-torch.optim"><span class="nav-number">1.6.</span> <span class="nav-text">Refactor using
-torch.optim</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#refactor-using-dataset"><span class="nav-number">1.7.</span> <span class="nav-text">Refactor using Dataset</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#refactor-using-dataloader"><span class="nav-number">1.8.</span> <span class="nav-text">Refactor using
-DataLoader</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#add-validation"><span class="nav-number">1.9.</span> <span class="nav-text">Add validation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#create-fit-and-get_data"><span class="nav-number">1.10.</span> <span class="nav-text">Create fit() and get_data()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#switch-to-cnn"><span class="nav-number">1.11.</span> <span class="nav-text">Switch to CNN</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#using-nn.sequential"><span class="nav-number">1.12.</span> <span class="nav-text">Using nn.Sequential</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#wrapping-dataloader"><span class="nav-number">1.13.</span> <span class="nav-text">Wrapping DataLoader</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#using-your-gpu"><span class="nav-number">1.14.</span> <span class="nav-text">Using your GPU</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#closing-thoughts"><span class="nav-number">1.15.</span> <span class="nav-text">Closing thoughts</span></a></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#What-is-torch-nn-really"><span class="nav-number">1.</span> <span class="nav-text">What is torch.nn really?</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#MNIST-data-setup"><span class="nav-number">1.1.</span> <span class="nav-text">MNIST data setup</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Neural-net-from-scratch-without-torch-nn"><span class="nav-number">1.2.</span> <span class="nav-text">Neural net from scratch (without torch.nn)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link"><span class="nav-number">1.2.0.1.</span> <span class="nav-text">Note</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Using-torch-nn-functional"><span class="nav-number">1.3.</span> <span class="nav-text">Using torch.nn.functional</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Refactor-using-nn-Module"><span class="nav-number">1.4.</span> <span class="nav-text">Refactor using nn.Module</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link"><span class="nav-number">1.4.0.1.</span> <span class="nav-text">Note</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Refactor-using-nn-Linear"><span class="nav-number">1.5.</span> <span class="nav-text">Refactor using nn.Linear</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Refactor-using-torch-optim"><span class="nav-number">1.6.</span> <span class="nav-text">Refactor using torch.optim</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Refactor-using-Dataset"><span class="nav-number">1.7.</span> <span class="nav-text">Refactor using Dataset</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Refactor-using-DataLoader"><span class="nav-number">1.8.</span> <span class="nav-text">Refactor using DataLoader</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Add-validation"><span class="nav-number">1.9.</span> <span class="nav-text">Add validation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Create-fit-and-get-data"><span class="nav-number">1.10.</span> <span class="nav-text">Create fit() and get_data()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Switch-to-CNN"><span class="nav-number">1.11.</span> <span class="nav-text">Switch to CNN</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Using-nn-Sequential"><span class="nav-number">1.12.</span> <span class="nav-text">Using nn.Sequential</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Wrapping-DataLoader"><span class="nav-number">1.13.</span> <span class="nav-text">Wrapping DataLoader</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Using-your-GPU"><span class="nav-number">1.14.</span> <span class="nav-text">Using your GPU</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Closing-thoughts"><span class="nav-number">1.15.</span> <span class="nav-text">Closing thoughts</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -226,7 +215,7 @@ DataLoader</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" h
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2023-07-13 16:30:18 / 修改时间：16:32:00" itemprop="dateCreated datePublished" datetime="2023-07-13T16:30:18+08:00">2023-07-13</time>
+      <time title="创建时间：2023-07-13 16:30:18 / 修改时间：16:32:43" itemprop="dateCreated datePublished" datetime="2023-07-13T16:30:18+08:00">2023-07-13</time>
     </span>
 
   
@@ -238,444 +227,190 @@ DataLoader</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" h
     
     
     
-    <div class="post-body" itemprop="articleBody"><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># For tips on running notebooks in Google Colab, see</span></span><br><span class="line"><span class="comment"># https://pytorch.org/tutorials/beginner/colab</span></span><br><span class="line">%matplotlib inline</span><br></pre></td></tr></table></figure>
-<p>这篇文章是官网上的一篇jupyter notebook,
-主要讲了pytorch学习的工作原理，以及如何一步步从手动训练模型到使用pytorch高度抽象化地训练模型。
-<span id="more"></span></p>
-<h1 id="what-is-torch.nn-really">What is <code>torch.nn</code>
-<em>really</em>?</h1>
-<p><strong>Authors:</strong> Jeremy Howard, <a target="_blank" rel="noopener" href="https://www.fast.ai">fast.ai</a>. Thanks to Rachel Thomas and
-Francisco Ingham.</p>
-<p>We recommend running this tutorial as a notebook, not a script. To
-download the notebook (<code>.ipynb</code>) file, click the link at the
-top of the page.</p>
-<p>PyTorch provides the elegantly designed modules and classes <a target="_blank" rel="noopener" href="https://pytorch.org/docs/stable/nn.html">torch.nn</a> , <a target="_blank" rel="noopener" href="https://pytorch.org/docs/stable/optim.html">torch.optim</a> , <a target="_blank" rel="noopener" href="https://pytorch.org/docs/stable/data.html?highlight=dataset#torch.utils.data.Dataset">Dataset</a>
-, and <a target="_blank" rel="noopener" href="https://pytorch.org/docs/stable/data.html?highlight=dataloader#torch.utils.data.DataLoader">DataLoader</a>
-to help you create and train neural networks. In order to fully utilize
-their power and customize them for your problem, you need to really
-understand exactly what they're doing. To develop this understanding, we
-will first train basic neural net on the MNIST data set without using
-any features from these models; we will initially only use the most
-basic PyTorch tensor functionality. Then, we will incrementally add one
-feature from <code>torch.nn</code>, <code>torch.optim</code>,
-<code>Dataset</code>, or <code>DataLoader</code> at a time, showing
-exactly what each piece does, and how it works to make the code either
-more concise, or more flexible.</p>
-<p><strong>This tutorial assumes you already have PyTorch installed, and
-are familiar with the basics of tensor operations.</strong> (If you're
-familiar with Numpy array operations, you'll find the PyTorch tensor
-operations used here nearly identical).</p>
-<h2 id="mnist-data-setup">MNIST data setup</h2>
-<p>We will use the classic <a target="_blank" rel="noopener" href="http://deeplearning.net/data/mnist/">MNIST</a> dataset, which
-consists of black-and-white images of hand-drawn digits (between 0 and
-9).</p>
-<p>We will use <a target="_blank" rel="noopener" href="https://docs.python.org/3/library/pathlib.html">pathlib</a> for
-dealing with paths (part of the Python 3 standard library), and will
-download the dataset using <a target="_blank" rel="noopener" href="http://docs.python-requests.org/en/master/">requests</a>. We will
-only import modules when we use them, so you can see exactly what's
-being used at each point.</p>
+    <div class="post-body" itemprop="articleBody"><p>这篇文章是官网上的一篇jupyter notebook, 主要讲了pytorch学习的工作原理，以及如何一步步从手动训练模型到使用pytorch高度抽象化地训练模型。<br><span id="more"></span><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># For tips on running notebooks in Google Colab, see</span></span><br><span class="line"><span class="comment"># https://pytorch.org/tutorials/beginner/colab</span></span><br><span class="line">%matplotlib inline</span><br></pre></td></tr></table></figure></p>
+<h1 id="What-is-torch-nn-really"><a href="#What-is-torch-nn-really" class="headerlink" title="What is torch.nn really?"></a>What is <code>torch.nn</code> <em>really</em>?</h1><p><strong>Authors:</strong> Jeremy Howard, <a target="_blank" rel="noopener" href="https://www.fast.ai">fast.ai</a>. Thanks to Rachel Thomas and Francisco Ingham.</p>
+<p>We recommend running this tutorial as a notebook, not a script. To download the notebook (<code>.ipynb</code>) file,<br>click the link at the top of the page.</p>
+<p>PyTorch provides the elegantly designed modules and classes <a target="_blank" rel="noopener" href="https://pytorch.org/docs/stable/nn.html">torch.nn</a> ,<br><a target="_blank" rel="noopener" href="https://pytorch.org/docs/stable/optim.html">torch.optim</a> ,<br><a target="_blank" rel="noopener" href="https://pytorch.org/docs/stable/data.html?highlight=dataset#torch.utils.data.Dataset">Dataset</a> ,<br>and <a target="_blank" rel="noopener" href="https://pytorch.org/docs/stable/data.html?highlight=dataloader#torch.utils.data.DataLoader">DataLoader</a><br>to help you create and train neural networks.<br>In order to fully utilize their power and customize<br>them for your problem, you need to really understand exactly what they’re<br>doing. To develop this understanding, we will first train basic neural net<br>on the MNIST data set without using any features from these models; we will<br>initially only use the most basic PyTorch tensor functionality. Then, we will<br>incrementally add one feature from <code>torch.nn</code>, <code>torch.optim</code>, <code>Dataset</code>, or<br><code>DataLoader</code> at a time, showing exactly what each piece does, and how it<br>works to make the code either more concise, or more flexible.</p>
+<p><strong>This tutorial assumes you already have PyTorch installed, and are familiar<br>with the basics of tensor operations.</strong> (If you’re familiar with Numpy array<br>operations, you’ll find the PyTorch tensor operations used here nearly identical).</p>
+<h2 id="MNIST-data-setup"><a href="#MNIST-data-setup" class="headerlink" title="MNIST data setup"></a>MNIST data setup</h2><p>We will use the classic <a target="_blank" rel="noopener" href="http://deeplearning.net/data/mnist/">MNIST</a> dataset,<br>which consists of black-and-white images of hand-drawn digits (between 0 and 9).</p>
+<p>We will use <a target="_blank" rel="noopener" href="https://docs.python.org/3/library/pathlib.html">pathlib</a><br>for dealing with paths (part of the Python 3 standard library), and will<br>download the dataset using<br><a target="_blank" rel="noopener" href="http://docs.python-requests.org/en/master/">requests</a>. We will only<br>import modules when we use them, so you can see exactly what’s being<br>used at each point.</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pathlib <span class="keyword">import</span> Path</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">DATA_PATH = Path(<span class="string">&quot;data&quot;</span>)</span><br><span class="line">PATH = DATA_PATH / <span class="string">&quot;mnist&quot;</span></span><br><span class="line"></span><br><span class="line">PATH.mkdir(parents=<span class="literal">True</span>, exist_ok=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">URL = <span class="string">&quot;https://github.com/pytorch/tutorials/raw/main/_static/&quot;</span></span><br><span class="line">FILENAME = <span class="string">&quot;mnist.pkl.gz&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> <span class="keyword">not</span> (PATH / FILENAME).exists():</span><br><span class="line">        content = requests.get(URL + FILENAME).content</span><br><span class="line">        (PATH / FILENAME).<span class="built_in">open</span>(<span class="string">&quot;wb&quot;</span>).write(content)</span><br></pre></td></tr></table></figure>
-<p>This dataset is in numpy array format, and has been stored using
-pickle, a python-specific format for serializing data.</p>
+<p>This dataset is in numpy array format, and has been stored using pickle,<br>a python-specific format for serializing data.</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pickle</span><br><span class="line"><span class="keyword">import</span> gzip</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> gzip.<span class="built_in">open</span>((PATH / FILENAME).as_posix(), <span class="string">&quot;rb&quot;</span>) <span class="keyword">as</span> f:</span><br><span class="line">        ((x_train, y_train), (x_valid, y_valid), _) = pickle.load(f, encoding=<span class="string">&quot;latin-1&quot;</span>)</span><br></pre></td></tr></table></figure>
-<p>Each image is 28 x 28, and is being stored as a flattened row of
-length 784 (=28x28). Let's take a look at one; we need to reshape it to
-2d first.</p>
+<p>Each image is 28 x 28, and is being stored as a flattened row of length<br>784 (=28x28). Let’s take a look at one; we need to reshape it to 2d<br>first.</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> matplotlib <span class="keyword">import</span> pyplot</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">pyplot.imshow(x_train[<span class="number">0</span>].reshape((<span class="number">28</span>, <span class="number">28</span>)), cmap=<span class="string">&quot;gray&quot;</span>)</span><br><span class="line"><span class="comment"># ``pyplot.show()`` only if not on Colab</span></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    <span class="keyword">import</span> google.colab</span><br><span class="line"><span class="keyword">except</span> ImportError:</span><br><span class="line">    pyplot.show()</span><br><span class="line"><span class="built_in">print</span>(x_train.shape)</span><br></pre></td></tr></table></figure>
-<p>PyTorch uses <code>torch.tensor</code>, rather than numpy arrays, so
-we need to convert our data.</p>
+<p>PyTorch uses <code>torch.tensor</code>, rather than numpy arrays, so we need to<br>convert our data.</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"></span><br><span class="line">x_train, y_train, x_valid, y_valid = <span class="built_in">map</span>(</span><br><span class="line">    torch.tensor, (x_train, y_train, x_valid, y_valid)</span><br><span class="line">)</span><br><span class="line">n, c = x_train.shape</span><br><span class="line"><span class="built_in">print</span>(x_train, y_train)</span><br><span class="line"><span class="built_in">print</span>(x_train.shape)</span><br><span class="line"><span class="built_in">print</span>(y_train.<span class="built_in">min</span>(), y_train.<span class="built_in">max</span>())</span><br></pre></td></tr></table></figure>
-<h2 id="neural-net-from-scratch-without-torch.nn">Neural net from
-scratch (without <code>torch.nn</code>)</h2>
-<p>Let's first create a model using nothing but PyTorch tensor
-operations. We're assuming you're already familiar with the basics of
-neural networks. (If you're not, you can learn them at <a target="_blank" rel="noopener" href="https://course.fast.ai">course.fast.ai</a>).</p>
-<p>PyTorch provides methods to create random or zero-filled tensors,
-which we will use to create our weights and bias for a simple linear
-model. These are just regular tensors, with one very special addition:
-we tell PyTorch that they require a gradient. This causes PyTorch to
-record all of the operations done on the tensor, so that it can
-calculate the gradient during back-propagation
-<em>automatically</em>!</p>
-<p>For the weights, we set <code>requires_grad</code>
-<strong>after</strong> the initialization, since we don't want that step
-included in the gradient. (Note that a trailing <code>_</code> in
-PyTorch signifies that the operation is performed in-place.)</p>
-<div class="alert alert-info">
-<h4>
-Note
-</h4>
-<p>
-We are initializing the weights here with <a target="_blank" rel="noopener" href="http://proceedings.mlr.press/v9/glorot10a/glorot10a.pdf">Xavier
-initialisation</a> (by multiplying with <code>1/sqrt(n)</code>).
-</p>
-</div>
+<h2 id="Neural-net-from-scratch-without-torch-nn"><a href="#Neural-net-from-scratch-without-torch-nn" class="headerlink" title="Neural net from scratch (without torch.nn)"></a>Neural net from scratch (without <code>torch.nn</code>)</h2><p>Let’s first create a model using nothing but PyTorch tensor operations. We’re assuming<br>you’re already familiar with the basics of neural networks. (If you’re not, you can<br>learn them at <a target="_blank" rel="noopener" href="https://course.fast.ai">course.fast.ai</a>).</p>
+<p>PyTorch provides methods to create random or zero-filled tensors, which we will<br>use to create our weights and bias for a simple linear model. These are just regular<br>tensors, with one very special addition: we tell PyTorch that they require a<br>gradient. This causes PyTorch to record all of the operations done on the tensor,<br>so that it can calculate the gradient during back-propagation <em>automatically</em>!</p>
+<p>For the weights, we set <code>requires_grad</code> <strong>after</strong> the initialization, since we<br>don’t want that step included in the gradient. (Note that a trailing <code>_</code> in<br>PyTorch signifies that the operation is performed in-place.)</p>
+<div class="alert alert-info"><h4>Note</h4><p>We are initializing the weights here with
+   [Xavier initialisation](http://proceedings.mlr.press/v9/glorot10a/glorot10a.pdf)
+   (by multiplying with ``1/sqrt(n)``).</p></div>
+
+
+
+
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> math</span><br><span class="line"></span><br><span class="line">weights = torch.randn(<span class="number">784</span>, <span class="number">10</span>) / math.sqrt(<span class="number">784</span>)</span><br><span class="line">weights.requires_grad_()</span><br><span class="line">bias = torch.zeros(<span class="number">10</span>, requires_grad=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure>
-<p>Thanks to PyTorch's ability to calculate gradients automatically, we
-can use any standard Python function (or callable object) as a model! So
-let's just write a plain matrix multiplication and broadcasted addition
-to create a simple linear model. We also need an activation function, so
-we'll write <code>log_softmax</code> and use it. Remember: although
-PyTorch provides lots of prewritten loss functions, activation
-functions, and so forth, you can easily write your own using plain
-python. PyTorch will even create fast GPU or vectorized CPU code for
-your function automatically.</p>
+<p>Thanks to PyTorch’s ability to calculate gradients automatically, we can<br>use any standard Python function (or callable object) as a model! So<br>let’s just write a plain matrix multiplication and broadcasted addition<br>to create a simple linear model. We also need an activation function, so<br>we’ll write <code>log_softmax</code> and use it. Remember: although PyTorch<br>provides lots of prewritten loss functions, activation functions, and<br>so forth, you can easily write your own using plain python. PyTorch will<br>even create fast GPU or vectorized CPU code for your function<br>automatically.</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">log_softmax</span>(<span class="params">x</span>):</span><br><span class="line">    <span class="keyword">return</span> x - x.exp().<span class="built_in">sum</span>(-<span class="number">1</span>).log().unsqueeze(-<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">model</span>(<span class="params">xb</span>):</span><br><span class="line">    <span class="keyword">return</span> log_softmax(xb @ weights + bias)</span><br></pre></td></tr></table></figure>
-<p>In the above, the <code>@</code> stands for the matrix multiplication
-operation. We will call our function on one batch of data (in this case,
-64 images). This is one <em>forward pass</em>. Note that our predictions
-won't be any better than random at this stage, since we start with
-random weights.</p>
+<p>In the above, the <code>@</code> stands for the matrix multiplication operation. We will call<br>our function on one batch of data (in this case, 64 images).  This is<br>one <em>forward pass</em>.  Note that our predictions won’t be any better than<br>random at this stage, since we start with random weights.</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">bs = <span class="number">64</span>  <span class="comment"># batch size</span></span><br><span class="line"></span><br><span class="line">xb = x_train[<span class="number">0</span>:bs]  <span class="comment"># a mini-batch from x</span></span><br><span class="line">preds = model(xb)  <span class="comment"># predictions</span></span><br><span class="line">preds[<span class="number">0</span>], preds.shape</span><br><span class="line"><span class="built_in">print</span>(preds[<span class="number">0</span>], preds.shape)</span><br></pre></td></tr></table></figure>
-<p>As you see, the <code>preds</code> tensor contains not only the
-tensor values, but also a gradient function. We'll use this later to do
-backprop.</p>
-<p>Let's implement negative log-likelihood to use as the loss function
-(again, we can just use standard Python):</p>
+<p>As you see, the <code>preds</code> tensor contains not only the tensor values, but also a<br>gradient function. We’ll use this later to do backprop.</p>
+<p>Let’s implement negative log-likelihood to use as the loss function<br>(again, we can just use standard Python):</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">nll</span>(<span class="params"><span class="built_in">input</span>, target</span>):</span><br><span class="line">    <span class="keyword">return</span> -<span class="built_in">input</span>[<span class="built_in">range</span>(target.shape[<span class="number">0</span>]), target].mean()</span><br><span class="line"></span><br><span class="line">loss_func = nll</span><br></pre></td></tr></table></figure>
-<p>Let's check our loss with our random model, so we can see if we
-improve after a backprop pass later.</p>
+<p>Let’s check our loss with our random model, so we can see if we improve<br>after a backprop pass later.</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">yb = y_train[<span class="number">0</span>:bs]</span><br><span class="line"><span class="built_in">print</span>(loss_func(preds, yb))</span><br></pre></td></tr></table></figure>
-<p>Let's also implement a function to calculate the accuracy of our
-model. For each prediction, if the index with the largest value matches
-the target value, then the prediction was correct.</p>
+<p>Let’s also implement a function to calculate the accuracy of our model.<br>For each prediction, if the index with the largest value matches the<br>target value, then the prediction was correct.</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">accuracy</span>(<span class="params">out, yb</span>):</span><br><span class="line">    preds = torch.argmax(out, dim=<span class="number">1</span>)</span><br><span class="line">    <span class="keyword">return</span> (preds == yb).<span class="built_in">float</span>().mean()</span><br></pre></td></tr></table></figure>
-<p>Let's check the accuracy of our random model, so we can see if our
-accuracy improves as our loss improves.</p>
+<p>Let’s check the accuracy of our random model, so we can see if our<br>accuracy improves as our loss improves.</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">print</span>(accuracy(preds, yb))</span><br></pre></td></tr></table></figure>
-<p>We can now run a training loop. For each iteration, we will:</p>
+<p>We can now run a training loop.  For each iteration, we will:</p>
 <ul>
 <li>select a mini-batch of data (of size <code>bs</code>)</li>
 <li>use the model to make predictions</li>
 <li>calculate the loss</li>
-<li><code>loss.backward()</code> updates the gradients of the model, in
-this case, <code>weights</code> and <code>bias</code>.</li>
+<li><code>loss.backward()</code> updates the gradients of the model, in this case, <code>weights</code><br>and <code>bias</code>.</li>
 </ul>
-<p>We now use these gradients to update the weights and bias. We do this
-within the <code>torch.no_grad()</code> context manager, because we do
-not want these actions to be recorded for our next calculation of the
-gradient. You can read more about how PyTorch's Autograd records
-operations <a target="_blank" rel="noopener" href="https://pytorch.org/docs/stable/notes/autograd.html">here</a>.</p>
-<p>We then set the gradients to zero, so that we are ready for the next
-loop. Otherwise, our gradients would record a running tally of all the
-operations that had happened (i.e. <code>loss.backward()</code>
-<em>adds</em> the gradients to whatever is already stored, rather than
-replacing them).</p>
-<p>.. tip:: You can use the standard python debugger to step through
-PyTorch code, allowing you to check the various variable values at each
-step. Uncomment <code>set_trace()</code> below to try it out.</p>
+<p>We now use these gradients to update the weights and bias.  We do this<br>within the <code>torch.no_grad()</code> context manager, because we do not want these<br>actions to be recorded for our next calculation of the gradient.  You can read<br>more about how PyTorch’s Autograd records operations<br><a target="_blank" rel="noopener" href="https://pytorch.org/docs/stable/notes/autograd.html">here</a>.</p>
+<p>We then set the<br>gradients to zero, so that we are ready for the next loop.<br>Otherwise, our gradients would record a running tally of all the operations<br>that had happened (i.e. <code>loss.backward()</code> <em>adds</em> the gradients to whatever is<br>already stored, rather than replacing them).</p>
+<p>.. tip:: You can use the standard python debugger to step through PyTorch<br>   code, allowing you to check the various variable values at each step.<br>   Uncomment <code>set_trace()</code> below to try it out.</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> IPython.core.debugger <span class="keyword">import</span> set_trace</span><br><span class="line"></span><br><span class="line">lr = <span class="number">0.5</span>  <span class="comment"># learning rate</span></span><br><span class="line">epochs = <span class="number">2</span>  <span class="comment"># how many epochs to train for</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> epoch <span class="keyword">in</span> <span class="built_in">range</span>(epochs):</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>((n - <span class="number">1</span>) // bs + <span class="number">1</span>):</span><br><span class="line">        <span class="comment">#         set_trace()</span></span><br><span class="line">        start_i = i * bs</span><br><span class="line">        end_i = start_i + bs</span><br><span class="line">        xb = x_train[start_i:end_i]</span><br><span class="line">        yb = y_train[start_i:end_i]</span><br><span class="line">        pred = model(xb)</span><br><span class="line">        loss = loss_func(pred, yb)</span><br><span class="line"></span><br><span class="line">        loss.backward()</span><br><span class="line">        <span class="keyword">with</span> torch.no_grad():</span><br><span class="line">            weights -= weights.grad * lr</span><br><span class="line">            bias -= bias.grad * lr</span><br><span class="line">            weights.grad.zero_()</span><br><span class="line">            bias.grad.zero_()</span><br></pre></td></tr></table></figure>
-<p>That's it: we've created and trained a minimal neural network (in
-this case, a logistic regression, since we have no hidden layers)
-entirely from scratch!</p>
-<p>Let's check the loss and accuracy and compare those to what we got
-earlier. We expect that the loss will have decreased and accuracy to
-have increased, and they have.</p>
+<p>That’s it: we’ve created and trained a minimal neural network (in this case, a<br>logistic regression, since we have no hidden layers) entirely from scratch!</p>
+<p>Let’s check the loss and accuracy and compare those to what we got<br>earlier. We expect that the loss will have decreased and accuracy to<br>have increased, and they have.</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">print</span>(loss_func(model(xb), yb), accuracy(model(xb), yb))</span><br></pre></td></tr></table></figure>
-<h2 id="using-torch.nn.functional">Using
-<code>torch.nn.functional</code></h2>
-<p>We will now refactor our code, so that it does the same thing as
-before, only we'll start taking advantage of PyTorch's <code>nn</code>
-classes to make it more concise and flexible. At each step from here, we
-should be making our code one or more of: shorter, more understandable,
-and/or more flexible.</p>
-<p>The first and easiest step is to make our code shorter by replacing
-our hand-written activation and loss functions with those from
-<code>torch.nn.functional</code> (which is generally imported into the
-namespace <code>F</code> by convention). This module contains all the
-functions in the <code>torch.nn</code> library (whereas other parts of
-the library contain classes). As well as a wide range of loss and
-activation functions, you'll also find here some convenient functions
-for creating neural nets, such as pooling functions. (There are also
-functions for doing convolutions, linear layers, etc, but as we'll see,
-these are usually better handled using other parts of the library.)</p>
-<p>If you're using negative log likelihood loss and log softmax
-activation, then Pytorch provides a single function
-<code>F.cross_entropy</code> that combines the two. So we can even
-remove the activation function from our model.</p>
+<h2 id="Using-torch-nn-functional"><a href="#Using-torch-nn-functional" class="headerlink" title="Using torch.nn.functional"></a>Using <code>torch.nn.functional</code></h2><p>We will now refactor our code, so that it does the same thing as before, only<br>we’ll start taking advantage of PyTorch’s <code>nn</code> classes to make it more concise<br>and flexible. At each step from here, we should be making our code one or more<br>of: shorter, more understandable, and/or more flexible.</p>
+<p>The first and easiest step is to make our code shorter by replacing our<br>hand-written activation and loss functions with those from <code>torch.nn.functional</code><br>(which is generally imported into the namespace <code>F</code> by convention). This module<br>contains all the functions in the <code>torch.nn</code> library (whereas other parts of the<br>library contain classes). As well as a wide range of loss and activation<br>functions, you’ll also find here some convenient functions for creating neural<br>nets, such as pooling functions. (There are also functions for doing convolutions,<br>linear layers, etc, but as we’ll see, these are usually better handled using<br>other parts of the library.)</p>
+<p>If you’re using negative log likelihood loss and log softmax activation,<br>then Pytorch provides a single function <code>F.cross_entropy</code> that combines<br>the two. So we can even remove the activation function from our model.</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch.nn.functional <span class="keyword">as</span> F</span><br><span class="line"></span><br><span class="line">loss_func = F.cross_entropy</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">model</span>(<span class="params">xb</span>):</span><br><span class="line">    <span class="keyword">return</span> xb @ weights + bias</span><br></pre></td></tr></table></figure>
-<p>Note that we no longer call <code>log_softmax</code> in the
-<code>model</code> function. Let's confirm that our loss and accuracy
-are the same as before:</p>
+<p>Note that we no longer call <code>log_softmax</code> in the <code>model</code> function. Let’s<br>confirm that our loss and accuracy are the same as before:</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">print</span>(loss_func(model(xb), yb), accuracy(model(xb), yb))</span><br></pre></td></tr></table></figure>
-<h2 id="refactor-using-nn.module">Refactor using
-<code>nn.Module</code></h2>
-<p>Next up, we'll use <code>nn.Module</code> and
-<code>nn.Parameter</code>, for a clearer and more concise training loop.
-We subclass <code>nn.Module</code> (which itself is a class and able to
-keep track of state). In this case, we want to create a class that holds
-our weights, bias, and method for the forward step.
-<code>nn.Module</code> has a number of attributes and methods (such as
-<code>.parameters()</code> and <code>.zero_grad()</code>) which we will
-be using.</p>
-<div class="alert alert-info">
-<h4>
-Note
-</h4>
-<p>
-<code>nn.Module</code> (uppercase M) is a PyTorch specific concept, and
-is a class we'll be using a lot. <code>nn.Module</code> is not to be
-confused with the Python concept of a (lowercase <code>m</code>) <a target="_blank" rel="noopener" href="https://docs.python.org/3/tutorial/modules.html">module</a>, which
-is a file of Python code that can be imported.
-</p>
-</div>
+<h2 id="Refactor-using-nn-Module"><a href="#Refactor-using-nn-Module" class="headerlink" title="Refactor using nn.Module"></a>Refactor using <code>nn.Module</code></h2><p>Next up, we’ll use <code>nn.Module</code> and <code>nn.Parameter</code>, for a clearer and more<br>concise training loop. We subclass <code>nn.Module</code> (which itself is a class and<br>able to keep track of state).  In this case, we want to create a class that<br>holds our weights, bias, and method for the forward step.  <code>nn.Module</code> has a<br>number of attributes and methods (such as <code>.parameters()</code> and <code>.zero_grad()</code>)<br>which we will be using.</p>
+<div class="alert alert-info"><h4>Note</h4><p>``nn.Module`` (uppercase M) is a PyTorch specific concept, and is a
+   class we'll be using a lot. ``nn.Module`` is not to be confused with the Python
+   concept of a (lowercase ``m``) [module](https://docs.python.org/3/tutorial/modules.html),
+   which is a file of Python code that can be imported.</p></div>
+
+
+
+
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> torch <span class="keyword">import</span> nn</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Mnist_Logistic</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">super</span>().__init__()</span><br><span class="line">        self.weights = nn.Parameter(torch.randn(<span class="number">784</span>, <span class="number">10</span>) / math.sqrt(<span class="number">784</span>))</span><br><span class="line">        self.bias = nn.Parameter(torch.zeros(<span class="number">10</span>))</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, xb</span>):</span><br><span class="line">        <span class="keyword">return</span> xb @ self.weights + self.bias</span><br></pre></td></tr></table></figure>
-<p>Since we're now using an object instead of just using a function, we
-first have to instantiate our model:</p>
+<p>Since we’re now using an object instead of just using a function, we<br>first have to instantiate our model:</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">model = Mnist_Logistic()</span><br></pre></td></tr></table></figure>
-<p>Now we can calculate the loss in the same way as before. Note that
-<code>nn.Module</code> objects are used as if they are functions (i.e
-they are <em>callable</em>), but behind the scenes Pytorch will call our
-<code>forward</code> method automatically.</p>
+<p>Now we can calculate the loss in the same way as before. Note that<br><code>nn.Module</code> objects are used as if they are functions (i.e they are<br><em>callable</em>), but behind the scenes Pytorch will call our <code>forward</code><br>method automatically.</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">print</span>(loss_func(model(xb), yb))</span><br></pre></td></tr></table></figure>
-<p>Previously for our training loop we had to update the values for each
-parameter by name, and manually zero out the grads for each parameter
-separately, like this:</p>
+<p>Previously for our training loop we had to update the values for each parameter<br>by name, and manually zero out the grads for each parameter separately, like this:</p>
 <p>::</p>
-<p>with torch.no_grad(): weights -= weights.grad * lr bias -= bias.grad
-* lr weights.grad.zero_() bias.grad.zero_()</p>
-<p>Now we can take advantage of model.parameters() and model.zero_grad()
-(which are both defined by PyTorch for <code>nn.Module</code>) to make
-those steps more concise and less prone to the error of forgetting some
-of our parameters, particularly if we had a more complicated model:</p>
+<p>   with torch.no<em>grad():<br>       weights -= weights.grad <em> lr<br>       bias -= bias.grad </em> lr<br>       weights.grad.zero</em>()<br>       bias.grad.zero_()</p>
+<p>Now we can take advantage of model.parameters() and model.zero_grad() (which<br>are both defined by PyTorch for <code>nn.Module</code>) to make those steps more concise<br>and less prone to the error of forgetting some of our parameters, particularly<br>if we had a more complicated model:</p>
 <p>::</p>
-<p>with torch.no_grad(): for p in model.parameters(): p -= p.grad * lr
-model.zero_grad()</p>
-<p>We'll wrap our little training loop in a <code>fit</code> function so
-we can run it again later.</p>
+<p>   with torch.no_grad():<br>       for p in model.parameters(): p -= p.grad * lr<br>       model.zero_grad()</p>
+<p>We’ll wrap our little training loop in a <code>fit</code> function so we can run it<br>again later.</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">fit</span>():</span><br><span class="line">    <span class="keyword">for</span> epoch <span class="keyword">in</span> <span class="built_in">range</span>(epochs):</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>((n - <span class="number">1</span>) // bs + <span class="number">1</span>):</span><br><span class="line">            start_i = i * bs</span><br><span class="line">            end_i = start_i + bs</span><br><span class="line">            xb = x_train[start_i:end_i]</span><br><span class="line">            yb = y_train[start_i:end_i]</span><br><span class="line">            pred = model(xb)</span><br><span class="line">            loss = loss_func(pred, yb)</span><br><span class="line"></span><br><span class="line">            loss.backward()</span><br><span class="line">            <span class="keyword">with</span> torch.no_grad():</span><br><span class="line">                <span class="keyword">for</span> p <span class="keyword">in</span> model.parameters():</span><br><span class="line">                    p -= p.grad * lr</span><br><span class="line">                model.zero_grad()</span><br><span class="line"></span><br><span class="line">fit()</span><br></pre></td></tr></table></figure>
-<p>Let's double-check that our loss has gone down:</p>
+<p>Let’s double-check that our loss has gone down:</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">print</span>(loss_func(model(xb), yb))</span><br></pre></td></tr></table></figure>
-<h2 id="refactor-using-nn.linear">Refactor using
-<code>nn.Linear</code></h2>
-<p>We continue to refactor our code. Instead of manually defining and
-initializing <code>self.weights</code> and <code>self.bias</code>, and
-calculating <code>xb  @ self.weights + self.bias</code>, we will instead
-use the Pytorch class <a target="_blank" rel="noopener" href="https://pytorch.org/docs/stable/nn.html#linear-layers">nn.Linear</a>
-for a linear layer, which does all that for us. Pytorch has many types
-of predefined layers that can greatly simplify our code, and often makes
-it faster too.</p>
+<h2 id="Refactor-using-nn-Linear"><a href="#Refactor-using-nn-Linear" class="headerlink" title="Refactor using nn.Linear"></a>Refactor using <code>nn.Linear</code></h2><p>We continue to refactor our code.  Instead of manually defining and<br>initializing <code>self.weights</code> and <code>self.bias</code>, and calculating <code>xb  @
+self.weights + self.bias</code>, we will instead use the Pytorch class<br><a target="_blank" rel="noopener" href="https://pytorch.org/docs/stable/nn.html#linear-layers">nn.Linear</a> for a<br>linear layer, which does all that for us. Pytorch has many types of<br>predefined layers that can greatly simplify our code, and often makes it<br>faster too.</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Mnist_Logistic</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">super</span>().__init__()</span><br><span class="line">        self.lin = nn.Linear(<span class="number">784</span>, <span class="number">10</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, xb</span>):</span><br><span class="line">        <span class="keyword">return</span> self.lin(xb)</span><br></pre></td></tr></table></figure>
-<p>We instantiate our model and calculate the loss in the same way as
-before:</p>
+<p>We instantiate our model and calculate the loss in the same way as before:</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">model = Mnist_Logistic()</span><br><span class="line"><span class="built_in">print</span>(loss_func(model(xb), yb))</span><br></pre></td></tr></table></figure>
-<p>We are still able to use our same <code>fit</code> method as
-before.</p>
+<p>We are still able to use our same <code>fit</code> method as before.</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">fit()</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(loss_func(model(xb), yb))</span><br></pre></td></tr></table></figure>
-<h2 id="refactor-using-torch.optim">Refactor using
-<code>torch.optim</code></h2>
-<p>Pytorch also has a package with various optimization algorithms,
-<code>torch.optim</code>. We can use the <code>step</code> method from
-our optimizer to take a forward step, instead of manually updating each
-parameter.</p>
-<p>This will let us replace our previous manually coded optimization
-step:</p>
+<h2 id="Refactor-using-torch-optim"><a href="#Refactor-using-torch-optim" class="headerlink" title="Refactor using torch.optim"></a>Refactor using <code>torch.optim</code></h2><p>Pytorch also has a package with various optimization algorithms, <code>torch.optim</code>.<br>We can use the <code>step</code> method from our optimizer to take a forward step, instead<br>of manually updating each parameter.</p>
+<p>This will let us replace our previous manually coded optimization step:</p>
 <p>::</p>
-<p>with torch.no_grad(): for p in model.parameters(): p -= p.grad * lr
-model.zero_grad()</p>
+<p>   with torch.no_grad():<br>       for p in model.parameters(): p -= p.grad * lr<br>       model.zero_grad()</p>
 <p>and instead use just:</p>
 <p>::</p>
-<p>opt.step() opt.zero_grad()</p>
-<p>(<code>optim.zero_grad()</code> resets the gradient to 0 and we need
-to call it before computing the gradient for the next minibatch.)</p>
+<p>   opt.step()<br>   opt.zero_grad()</p>
+<p>(<code>optim.zero_grad()</code> resets the gradient to 0 and we need to call it before<br>computing the gradient for the next minibatch.)</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> torch <span class="keyword">import</span> optim</span><br></pre></td></tr></table></figure>
-<p>We'll define a little function to create our model and optimizer so
-we can reuse it in the future.</p>
+<p>We’ll define a little function to create our model and optimizer so we<br>can reuse it in the future.</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">get_model</span>():</span><br><span class="line">    model = Mnist_Logistic()</span><br><span class="line">    <span class="keyword">return</span> model, optim.SGD(model.parameters(), lr=lr)</span><br><span class="line"></span><br><span class="line">model, opt = get_model()</span><br><span class="line"><span class="built_in">print</span>(loss_func(model(xb), yb))</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> epoch <span class="keyword">in</span> <span class="built_in">range</span>(epochs):</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>((n - <span class="number">1</span>) // bs + <span class="number">1</span>):</span><br><span class="line">        start_i = i * bs</span><br><span class="line">        end_i = start_i + bs</span><br><span class="line">        xb = x_train[start_i:end_i]</span><br><span class="line">        yb = y_train[start_i:end_i]</span><br><span class="line">        pred = model(xb)</span><br><span class="line">        loss = loss_func(pred, yb)</span><br><span class="line"></span><br><span class="line">        loss.backward()</span><br><span class="line">        opt.step()</span><br><span class="line">        opt.zero_grad()</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(loss_func(model(xb), yb))</span><br></pre></td></tr></table></figure>
-<h2 id="refactor-using-dataset">Refactor using Dataset</h2>
-<p>PyTorch has an abstract Dataset class. A Dataset can be anything that
-has a <code>__len__</code> function (called by Python's standard
-<code>len</code> function) and a <code>__getitem__</code> function as a
-way of indexing into it. <a target="_blank" rel="noopener" href="https://pytorch.org/tutorials/beginner/data_loading_tutorial.html">This
-tutorial</a> walks through a nice example of creating a custom
-<code>FacialLandmarkDataset</code> class as a subclass of
-<code>Dataset</code>.</p>
-<p>PyTorch's <a target="_blank" rel="noopener" href="https://pytorch.org/docs/stable/_modules/torch/utils/data/dataset.html#TensorDataset">TensorDataset</a>
-is a Dataset wrapping tensors. By defining a length and way of indexing,
-this also gives us a way to iterate, index, and slice along the first
-dimension of a tensor. This will make it easier to access both the
-independent and dependent variables in the same line as we train.</p>
+<h2 id="Refactor-using-Dataset"><a href="#Refactor-using-Dataset" class="headerlink" title="Refactor using Dataset"></a>Refactor using Dataset</h2><p>PyTorch has an abstract Dataset class.  A Dataset can be anything that has<br>a <code>__len__</code> function (called by Python’s standard <code>len</code> function) and<br>a <code>__getitem__</code> function as a way of indexing into it.<br><a target="_blank" rel="noopener" href="https://pytorch.org/tutorials/beginner/data_loading_tutorial.html">This tutorial</a><br>walks through a nice example of creating a custom <code>FacialLandmarkDataset</code> class<br>as a subclass of <code>Dataset</code>.</p>
+<p>PyTorch’s <a target="_blank" rel="noopener" href="https://pytorch.org/docs/stable/_modules/torch/utils/data/dataset.html#TensorDataset">TensorDataset</a><br>is a Dataset wrapping tensors. By defining a length and way of indexing,<br>this also gives us a way to iterate, index, and slice along the first<br>dimension of a tensor. This will make it easier to access both the<br>independent and dependent variables in the same line as we train.</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> torch.utils.data <span class="keyword">import</span> TensorDataset</span><br></pre></td></tr></table></figure>
-<p>Both <code>x_train</code> and <code>y_train</code> can be combined in
-a single <code>TensorDataset</code>, which will be easier to iterate
-over and slice.</p>
+<p>Both <code>x_train</code> and <code>y_train</code> can be combined in a single <code>TensorDataset</code>,<br>which will be easier to iterate over and slice.</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">train_ds = TensorDataset(x_train, y_train)</span><br></pre></td></tr></table></figure>
-<p>Previously, we had to iterate through minibatches of <code>x</code>
-and <code>y</code> values separately:</p>
+<p>Previously, we had to iterate through minibatches of <code>x</code> and <code>y</code> values separately:</p>
 <p>::</p>
-<p>xb = x_train[start_i:end_i] yb = y_train[start_i:end_i]</p>
+<p>   xb = x_train[start_i:end_i]<br>   yb = y_train[start_i:end_i]</p>
 <p>Now, we can do these two steps together:</p>
 <p>::</p>
-<p>xb,yb = train_ds[i<em>bs : i</em>bs+bs]</p>
+<p>   xb,yb = train_ds[i<em>bs : i</em>bs+bs]</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">model, opt = get_model()</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> epoch <span class="keyword">in</span> <span class="built_in">range</span>(epochs):</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>((n - <span class="number">1</span>) // bs + <span class="number">1</span>):</span><br><span class="line">        xb, yb = train_ds[i * bs: i * bs + bs]</span><br><span class="line">        pred = model(xb)</span><br><span class="line">        loss = loss_func(pred, yb)</span><br><span class="line"></span><br><span class="line">        loss.backward()</span><br><span class="line">        opt.step()</span><br><span class="line">        opt.zero_grad()</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(loss_func(model(xb), yb))</span><br></pre></td></tr></table></figure>
-<h2 id="refactor-using-dataloader">Refactor using
-<code>DataLoader</code></h2>
-<p>PyTorch's <code>DataLoader</code> is responsible for managing
-batches. You can create a <code>DataLoader</code> from any
-<code>Dataset</code>. <code>DataLoader</code> makes it easier to iterate
-over batches. Rather than having to use
-<code>train_ds[i*bs : i*bs+bs]</code>, the <code>DataLoader</code> gives
-us each minibatch automatically.</p>
+<h2 id="Refactor-using-DataLoader"><a href="#Refactor-using-DataLoader" class="headerlink" title="Refactor using DataLoader"></a>Refactor using <code>DataLoader</code></h2><p>PyTorch’s <code>DataLoader</code> is responsible for managing batches. You can<br>create a <code>DataLoader</code> from any <code>Dataset</code>. <code>DataLoader</code> makes it easier<br>to iterate over batches. Rather than having to use <code>train_ds[i*bs : i*bs+bs]</code>,<br>the <code>DataLoader</code> gives us each minibatch automatically.</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> torch.utils.data <span class="keyword">import</span> DataLoader</span><br><span class="line"></span><br><span class="line">train_ds = TensorDataset(x_train, y_train)</span><br><span class="line">train_dl = DataLoader(train_ds, batch_size=bs)</span><br></pre></td></tr></table></figure>
-<p>Previously, our loop iterated over batches <code>(xb, yb)</code> like
-this:</p>
+<p>Previously, our loop iterated over batches <code>(xb, yb)</code> like this:</p>
 <p>::</p>
-<p>for i in range((n-1)//bs + 1): xb,yb = train_ds[i<em>bs :
-i</em>bs+bs] pred = model(xb)</p>
-<p>Now, our loop is much cleaner, as <code>(xb, yb)</code> are loaded
-automatically from the data loader:</p>
+<p>   for i in range((n-1)//bs + 1):<br>       xb,yb = train_ds[i<em>bs : i</em>bs+bs]<br>       pred = model(xb)</p>
+<p>Now, our loop is much cleaner, as <code>(xb, yb)</code> are loaded automatically from the data loader:</p>
 <p>::</p>
-<p>for xb,yb in train_dl: pred = model(xb)</p>
+<p>   for xb,yb in train_dl:<br>       pred = model(xb)</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">model, opt = get_model()</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> epoch <span class="keyword">in</span> <span class="built_in">range</span>(epochs):</span><br><span class="line">    <span class="keyword">for</span> xb, yb <span class="keyword">in</span> train_dl:</span><br><span class="line">        pred = model(xb)</span><br><span class="line">        loss = loss_func(pred, yb)</span><br><span class="line"></span><br><span class="line">        loss.backward()</span><br><span class="line">        opt.step()</span><br><span class="line">        opt.zero_grad()</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(loss_func(model(xb), yb))</span><br></pre></td></tr></table></figure>
-<p>Thanks to PyTorch's <code>nn.Module</code>,
-<code>nn.Parameter</code>, <code>Dataset</code>, and
-<code>DataLoader</code>, our training loop is now dramatically smaller
-and easier to understand. Let's now try to add the basic features
-necessary to create effective models in practice.</p>
-<h2 id="add-validation">Add validation</h2>
-<p>In section 1, we were just trying to get a reasonable training loop
-set up for use on our training data. In reality, you
-<strong>always</strong> should also have a <a target="_blank" rel="noopener" href="https://www.fast.ai/2017/11/13/validation-sets/">validation
-set</a>, in order to identify if you are overfitting.</p>
-<p>Shuffling the training data is <a target="_blank" rel="noopener" href="https://www.quora.com/Does-the-order-of-training-data-matter-when-training-neural-networks">important</a>
-to prevent correlation between batches and overfitting. On the other
-hand, the validation loss will be identical whether we shuffle the
-validation set or not. Since shuffling takes extra time, it makes no
-sense to shuffle the validation data.</p>
-<p>We'll use a batch size for the validation set that is twice as large
-as that for the training set. This is because the validation set does
-not need backpropagation and thus takes less memory (it doesn't need to
-store the gradients). We take advantage of this to use a larger batch
-size and compute the loss more quickly.</p>
+<p>Thanks to PyTorch’s <code>nn.Module</code>, <code>nn.Parameter</code>, <code>Dataset</code>, and <code>DataLoader</code>,<br>our training loop is now dramatically smaller and easier to understand. Let’s<br>now try to add the basic features necessary to create effective models in practice.</p>
+<h2 id="Add-validation"><a href="#Add-validation" class="headerlink" title="Add validation"></a>Add validation</h2><p>In section 1, we were just trying to get a reasonable training loop set up for<br>use on our training data.  In reality, you <strong>always</strong> should also have<br>a <a target="_blank" rel="noopener" href="https://www.fast.ai/2017/11/13/validation-sets/">validation set</a>, in order<br>to identify if you are overfitting.</p>
+<p>Shuffling the training data is<br><a target="_blank" rel="noopener" href="https://www.quora.com/Does-the-order-of-training-data-matter-when-training-neural-networks">important</a><br>to prevent correlation between batches and overfitting. On the other hand, the<br>validation loss will be identical whether we shuffle the validation set or not.<br>Since shuffling takes extra time, it makes no sense to shuffle the validation data.</p>
+<p>We’ll use a batch size for the validation set that is twice as large as<br>that for the training set. This is because the validation set does not<br>need backpropagation and thus takes less memory (it doesn’t need to<br>store the gradients). We take advantage of this to use a larger batch<br>size and compute the loss more quickly.</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">train_ds = TensorDataset(x_train, y_train)</span><br><span class="line">train_dl = DataLoader(train_ds, batch_size=bs, shuffle=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">valid_ds = TensorDataset(x_valid, y_valid)</span><br><span class="line">valid_dl = DataLoader(valid_ds, batch_size=bs * <span class="number">2</span>)</span><br></pre></td></tr></table></figure>
-<p>We will calculate and print the validation loss at the end of each
-epoch.</p>
-<p>(Note that we always call <code>model.train()</code> before training,
-and <code>model.eval()</code> before inference, because these are used
-by layers such as <code>nn.BatchNorm2d</code> and
-<code>nn.Dropout</code> to ensure appropriate behavior for these
-different phases.)</p>
+<p>We will calculate and print the validation loss at the end of each epoch.</p>
+<p>(Note that we always call <code>model.train()</code> before training, and <code>model.eval()</code><br>before inference, because these are used by layers such as <code>nn.BatchNorm2d</code><br>and <code>nn.Dropout</code> to ensure appropriate behavior for these different phases.)</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">model, opt = get_model()</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> epoch <span class="keyword">in</span> <span class="built_in">range</span>(epochs):</span><br><span class="line">    model.train()</span><br><span class="line">    <span class="keyword">for</span> xb, yb <span class="keyword">in</span> train_dl:</span><br><span class="line">        pred = model(xb)</span><br><span class="line">        loss = loss_func(pred, yb)</span><br><span class="line"></span><br><span class="line">        loss.backward()</span><br><span class="line">        opt.step()</span><br><span class="line">        opt.zero_grad()</span><br><span class="line"></span><br><span class="line">    model.<span class="built_in">eval</span>()</span><br><span class="line">    <span class="keyword">with</span> torch.no_grad():</span><br><span class="line">        valid_loss = <span class="built_in">sum</span>(loss_func(model(xb), yb) <span class="keyword">for</span> xb, yb <span class="keyword">in</span> valid_dl)</span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span>(epoch, valid_loss / <span class="built_in">len</span>(valid_dl))</span><br></pre></td></tr></table></figure>
-<h2 id="create-fit-and-get_data">Create fit() and get_data()</h2>
-<p>We'll now do a little refactoring of our own. Since we go through a
-similar process twice of calculating the loss for both the training set
-and the validation set, let's make that into its own function,
-<code>loss_batch</code>, which computes the loss for one batch.</p>
-<p>We pass an optimizer in for the training set, and use it to perform
-backprop. For the validation set, we don't pass an optimizer, so the
-method doesn't perform backprop.</p>
+<h2 id="Create-fit-and-get-data"><a href="#Create-fit-and-get-data" class="headerlink" title="Create fit() and get_data()"></a>Create fit() and get_data()</h2><p>We’ll now do a little refactoring of our own. Since we go through a similar<br>process twice of calculating the loss for both the training set and the<br>validation set, let’s make that into its own function, <code>loss_batch</code>, which<br>computes the loss for one batch.</p>
+<p>We pass an optimizer in for the training set, and use it to perform<br>backprop.  For the validation set, we don’t pass an optimizer, so the<br>method doesn’t perform backprop.</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">loss_batch</span>(<span class="params">model, loss_func, xb, yb, opt=<span class="literal">None</span></span>):</span><br><span class="line">    loss = loss_func(model(xb), yb)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> opt <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">        loss.backward()</span><br><span class="line">        opt.step()</span><br><span class="line">        opt.zero_grad()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> loss.item(), <span class="built_in">len</span>(xb)</span><br></pre></td></tr></table></figure>
-<p><code>fit</code> runs the necessary operations to train our model and
-compute the training and validation losses for each epoch.</p>
+<p><code>fit</code> runs the necessary operations to train our model and compute the<br>training and validation losses for each epoch.</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">fit</span>(<span class="params">epochs, model, loss_func, opt, train_dl, valid_dl</span>):</span><br><span class="line">    <span class="keyword">for</span> epoch <span class="keyword">in</span> <span class="built_in">range</span>(epochs):</span><br><span class="line">        model.train()</span><br><span class="line">        <span class="keyword">for</span> xb, yb <span class="keyword">in</span> train_dl:</span><br><span class="line">            loss_batch(model, loss_func, xb, yb, opt)</span><br><span class="line"></span><br><span class="line">        model.<span class="built_in">eval</span>()</span><br><span class="line">        <span class="keyword">with</span> torch.no_grad():</span><br><span class="line">            losses, nums = <span class="built_in">zip</span>(</span><br><span class="line">                *[loss_batch(model, loss_func, xb, yb) <span class="keyword">for</span> xb, yb <span class="keyword">in</span> valid_dl]</span><br><span class="line">            )</span><br><span class="line">        val_loss = np.<span class="built_in">sum</span>(np.multiply(losses, nums)) / np.<span class="built_in">sum</span>(nums)</span><br><span class="line"></span><br><span class="line">        <span class="built_in">print</span>(epoch, val_loss)</span><br></pre></td></tr></table></figure>
-<p><code>get_data</code> returns dataloaders for the training and
-validation sets.</p>
+<p><code>get_data</code> returns dataloaders for the training and validation sets.</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">get_data</span>(<span class="params">train_ds, valid_ds, bs</span>):</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">        DataLoader(train_ds, batch_size=bs, shuffle=<span class="literal">True</span>),</span><br><span class="line">        DataLoader(valid_ds, batch_size=bs * <span class="number">2</span>),</span><br><span class="line">    )</span><br></pre></td></tr></table></figure>
-<p>Now, our whole process of obtaining the data loaders and fitting the
-model can be run in 3 lines of code:</p>
+<p>Now, our whole process of obtaining the data loaders and fitting the<br>model can be run in 3 lines of code:</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">train_dl, valid_dl = get_data(train_ds, valid_ds, bs)</span><br><span class="line">model, opt = get_model()</span><br><span class="line">fit(epochs, model, loss_func, opt, train_dl, valid_dl)</span><br></pre></td></tr></table></figure>
-<p>You can use these basic 3 lines of code to train a wide variety of
-models. Let's see if we can use them to train a convolutional neural
-network (CNN)!</p>
-<h2 id="switch-to-cnn">Switch to CNN</h2>
-<p>We are now going to build our neural network with three convolutional
-layers. Because none of the functions in the previous section assume
-anything about the model form, we'll be able to use them to train a CNN
-without any modification.</p>
-<p>We will use PyTorch's predefined <a target="_blank" rel="noopener" href="https://pytorch.org/docs/stable/nn.html#torch.nn.Conv2d">Conv2d</a>
-class as our convolutional layer. We define a CNN with 3 convolutional
-layers. Each convolution is followed by a ReLU. At the end, we perform
-an average pooling. (Note that <code>view</code> is PyTorch's version of
-Numpy's <code>reshape</code>)</p>
+<p>You can use these basic 3 lines of code to train a wide variety of models.<br>Let’s see if we can use them to train a convolutional neural network (CNN)!</p>
+<h2 id="Switch-to-CNN"><a href="#Switch-to-CNN" class="headerlink" title="Switch to CNN"></a>Switch to CNN</h2><p>We are now going to build our neural network with three convolutional layers.<br>Because none of the functions in the previous section assume anything about<br>the model form, we’ll be able to use them to train a CNN without any modification.</p>
+<p>We will use PyTorch’s predefined<br><a target="_blank" rel="noopener" href="https://pytorch.org/docs/stable/nn.html#torch.nn.Conv2d">Conv2d</a> class<br>as our convolutional layer. We define a CNN with 3 convolutional layers.<br>Each convolution is followed by a ReLU.  At the end, we perform an<br>average pooling.  (Note that <code>view</code> is PyTorch’s version of Numpy’s<br><code>reshape</code>)</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Mnist_CNN</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">super</span>().__init__()</span><br><span class="line">        self.conv1 = nn.Conv2d(<span class="number">1</span>, <span class="number">16</span>, kernel_size=<span class="number">3</span>, stride=<span class="number">2</span>, padding=<span class="number">1</span>)</span><br><span class="line">        self.conv2 = nn.Conv2d(<span class="number">16</span>, <span class="number">16</span>, kernel_size=<span class="number">3</span>, stride=<span class="number">2</span>, padding=<span class="number">1</span>)</span><br><span class="line">        self.conv3 = nn.Conv2d(<span class="number">16</span>, <span class="number">10</span>, kernel_size=<span class="number">3</span>, stride=<span class="number">2</span>, padding=<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, xb</span>):</span><br><span class="line">        xb = xb.view(-<span class="number">1</span>, <span class="number">1</span>, <span class="number">28</span>, <span class="number">28</span>)</span><br><span class="line">        xb = F.relu(self.conv1(xb))</span><br><span class="line">        xb = F.relu(self.conv2(xb))</span><br><span class="line">        xb = F.relu(self.conv3(xb))</span><br><span class="line">        xb = F.avg_pool2d(xb, <span class="number">4</span>)</span><br><span class="line">        <span class="keyword">return</span> xb.view(-<span class="number">1</span>, xb.size(<span class="number">1</span>))</span><br><span class="line"></span><br><span class="line">lr = <span class="number">0.1</span></span><br></pre></td></tr></table></figure>
-<p><a target="_blank" rel="noopener" href="https://cs231n.github.io/neural-networks-3/#sgd">Momentum</a> is a
-variation on stochastic gradient descent that takes previous updates
-into account as well and generally leads to faster training.</p>
+<p><a target="_blank" rel="noopener" href="https://cs231n.github.io/neural-networks-3/#sgd">Momentum</a> is a variation on<br>stochastic gradient descent that takes previous updates into account as well<br>and generally leads to faster training.</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">model = Mnist_CNN()</span><br><span class="line">opt = optim.SGD(model.parameters(), lr=lr, momentum=<span class="number">0.9</span>)</span><br><span class="line"></span><br><span class="line">fit(epochs, model, loss_func, opt, train_dl, valid_dl)</span><br></pre></td></tr></table></figure>
-<h2 id="using-nn.sequential">Using <code>nn.Sequential</code></h2>
-<p><code>torch.nn</code> has another handy class we can use to simplify
-our code: <a target="_blank" rel="noopener" href="https://pytorch.org/docs/stable/nn.html#torch.nn.Sequential">Sequential</a>
-. A <code>Sequential</code> object runs each of the modules contained
-within it, in a sequential manner. This is a simpler way of writing our
-neural network.</p>
-<p>To take advantage of this, we need to be able to easily define a
-<strong>custom layer</strong> from a given function. For instance,
-PyTorch doesn't have a <code>view</code> layer, and we need to create
-one for our network. <code>Lambda</code> will create a layer that we can
-then use when defining a network with <code>Sequential</code>.</p>
+<h2 id="Using-nn-Sequential"><a href="#Using-nn-Sequential" class="headerlink" title="Using nn.Sequential"></a>Using <code>nn.Sequential</code></h2><p><code>torch.nn</code> has another handy class we can use to simplify our code:<br><a target="_blank" rel="noopener" href="https://pytorch.org/docs/stable/nn.html#torch.nn.Sequential">Sequential</a> .<br>A <code>Sequential</code> object runs each of the modules contained within it, in a<br>sequential manner. This is a simpler way of writing our neural network.</p>
+<p>To take advantage of this, we need to be able to easily define a<br><strong>custom layer</strong> from a given function.  For instance, PyTorch doesn’t<br>have a <code>view</code> layer, and we need to create one for our network. <code>Lambda</code><br>will create a layer that we can then use when defining a network with<br><code>Sequential</code>.</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Lambda</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, func</span>):</span><br><span class="line">        <span class="built_in">super</span>().__init__()</span><br><span class="line">        self.func = func</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x</span>):</span><br><span class="line">        <span class="keyword">return</span> self.func(x)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">preprocess</span>(<span class="params">x</span>):</span><br><span class="line">    <span class="keyword">return</span> x.view(-<span class="number">1</span>, <span class="number">1</span>, <span class="number">28</span>, <span class="number">28</span>)</span><br></pre></td></tr></table></figure>
 <p>The model created with <code>Sequential</code> is simple:</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">model = nn.Sequential(</span><br><span class="line">    Lambda(preprocess),</span><br><span class="line">    nn.Conv2d(<span class="number">1</span>, <span class="number">16</span>, kernel_size=<span class="number">3</span>, stride=<span class="number">2</span>, padding=<span class="number">1</span>),</span><br><span class="line">    nn.ReLU(),</span><br><span class="line">    nn.Conv2d(<span class="number">16</span>, <span class="number">16</span>, kernel_size=<span class="number">3</span>, stride=<span class="number">2</span>, padding=<span class="number">1</span>),</span><br><span class="line">    nn.ReLU(),</span><br><span class="line">    nn.Conv2d(<span class="number">16</span>, <span class="number">10</span>, kernel_size=<span class="number">3</span>, stride=<span class="number">2</span>, padding=<span class="number">1</span>),</span><br><span class="line">    nn.ReLU(),</span><br><span class="line">    nn.AvgPool2d(<span class="number">4</span>),</span><br><span class="line">    Lambda(<span class="keyword">lambda</span> x: x.view(x.size(<span class="number">0</span>), -<span class="number">1</span>)),</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">opt = optim.SGD(model.parameters(), lr=lr, momentum=<span class="number">0.9</span>)</span><br><span class="line"></span><br><span class="line">fit(epochs, model, loss_func, opt, train_dl, valid_dl)</span><br></pre></td></tr></table></figure>
-<h2 id="wrapping-dataloader">Wrapping <code>DataLoader</code></h2>
-<p>Our CNN is fairly concise, but it only works with MNIST, because: -
-It assumes the input is a 28*28 long vector - It assumes that the final
-CNN grid size is 4*4 (since that's the average pooling kernel size we
-used)</p>
-<p>Let's get rid of these two assumptions, so our model works with any
-2d single channel image. First, we can remove the initial Lambda layer
-by moving the data preprocessing into a generator:</p>
+<h2 id="Wrapping-DataLoader"><a href="#Wrapping-DataLoader" class="headerlink" title="Wrapping DataLoader"></a>Wrapping <code>DataLoader</code></h2><p>Our CNN is fairly concise, but it only works with MNIST, because:</p>
+<ul>
+<li>It assumes the input is a 28*28 long vector</li>
+<li>It assumes that the final CNN grid size is 4*4 (since that’s the average pooling kernel size we used)</li>
+</ul>
+<p>Let’s get rid of these two assumptions, so our model works with any 2d<br>single channel image. First, we can remove the initial Lambda layer by<br>moving the data preprocessing into a generator:</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">preprocess</span>(<span class="params">x, y</span>):</span><br><span class="line">    <span class="keyword">return</span> x.view(-<span class="number">1</span>, <span class="number">1</span>, <span class="number">28</span>, <span class="number">28</span>), y</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">WrappedDataLoader</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, dl, func</span>):</span><br><span class="line">        self.dl = dl</span><br><span class="line">        self.func = func</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__len__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">len</span>(self.dl)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__iter__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">for</span> b <span class="keyword">in</span> self.dl:</span><br><span class="line">            <span class="keyword">yield</span> (self.func(*b))</span><br><span class="line"></span><br><span class="line">train_dl, valid_dl = get_data(train_ds, valid_ds, bs)</span><br><span class="line">train_dl = WrappedDataLoader(train_dl, preprocess)</span><br><span class="line">valid_dl = WrappedDataLoader(valid_dl, preprocess)</span><br></pre></td></tr></table></figure>
-<p>Next, we can replace <code>nn.AvgPool2d</code> with
-<code>nn.AdaptiveAvgPool2d</code>, which allows us to define the size of
-the <em>output</em> tensor we want, rather than the <em>input</em>
-tensor we have. As a result, our model will work with any size
-input.</p>
+<p>Next, we can replace <code>nn.AvgPool2d</code> with <code>nn.AdaptiveAvgPool2d</code>, which<br>allows us to define the size of the <em>output</em> tensor we want, rather than<br>the <em>input</em> tensor we have. As a result, our model will work with any<br>size input.</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">model = nn.Sequential(</span><br><span class="line">    nn.Conv2d(<span class="number">1</span>, <span class="number">16</span>, kernel_size=<span class="number">3</span>, stride=<span class="number">2</span>, padding=<span class="number">1</span>),</span><br><span class="line">    nn.ReLU(),</span><br><span class="line">    nn.Conv2d(<span class="number">16</span>, <span class="number">16</span>, kernel_size=<span class="number">3</span>, stride=<span class="number">2</span>, padding=<span class="number">1</span>),</span><br><span class="line">    nn.ReLU(),</span><br><span class="line">    nn.Conv2d(<span class="number">16</span>, <span class="number">10</span>, kernel_size=<span class="number">3</span>, stride=<span class="number">2</span>, padding=<span class="number">1</span>),</span><br><span class="line">    nn.ReLU(),</span><br><span class="line">    nn.AdaptiveAvgPool2d(<span class="number">1</span>),</span><br><span class="line">    Lambda(<span class="keyword">lambda</span> x: x.view(x.size(<span class="number">0</span>), -<span class="number">1</span>)),</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">opt = optim.SGD(model.parameters(), lr=lr, momentum=<span class="number">0.9</span>)</span><br></pre></td></tr></table></figure>
-<p>Let's try it out:</p>
+<p>Let’s try it out:</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fit(epochs, model, loss_func, opt, train_dl, valid_dl)</span><br></pre></td></tr></table></figure>
-<h2 id="using-your-gpu">Using your GPU</h2>
-<p>If you're lucky enough to have access to a CUDA-capable GPU (you can
-rent one for about $0.50/hour from most cloud providers) you can use it
-to speed up your code. First check that your GPU is working in
-Pytorch:</p>
+<h2 id="Using-your-GPU"><a href="#Using-your-GPU" class="headerlink" title="Using your GPU"></a>Using your GPU</h2><p>If you’re lucky enough to have access to a CUDA-capable GPU (you can<br>rent one for about $0.50/hour from most cloud providers) you can<br>use it to speed up your code. First check that your GPU is working in<br>Pytorch:</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">print</span>(torch.cuda.is_available())</span><br></pre></td></tr></table></figure>
 <p>And then create a device object for it:</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">dev = torch.device(</span><br><span class="line">    <span class="string">&quot;cuda&quot;</span>) <span class="keyword">if</span> torch.cuda.is_available() <span class="keyword">else</span> torch.device(<span class="string">&quot;cpu&quot;</span>)</span><br></pre></td></tr></table></figure>
-<p>Let's update <code>preprocess</code> to move batches to the GPU:</p>
+<p>Let’s update <code>preprocess</code> to move batches to the GPU:</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">preprocess</span>(<span class="params">x, y</span>):</span><br><span class="line">    <span class="keyword">return</span> x.view(-<span class="number">1</span>, <span class="number">1</span>, <span class="number">28</span>, <span class="number">28</span>).to(dev), y.to(dev)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">train_dl, valid_dl = get_data(train_ds, valid_ds, bs)</span><br><span class="line">train_dl = WrappedDataLoader(train_dl, preprocess)</span><br><span class="line">valid_dl = WrappedDataLoader(valid_dl, preprocess)</span><br></pre></td></tr></table></figure>
 <p>Finally, we can move our model to the GPU.</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">model.to(dev)</span><br><span class="line">opt = optim.SGD(model.parameters(), lr=lr, momentum=<span class="number">0.9</span>)</span><br></pre></td></tr></table></figure>
 <p>You should find it runs faster now:</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fit(epochs, model, loss_func, opt, train_dl, valid_dl)</span><br></pre></td></tr></table></figure>
-<h2 id="closing-thoughts">Closing thoughts</h2>
-<p>We now have a general data pipeline and training loop which you can
-use for training many types of models using Pytorch. To see how simple
-training a model can now be, take a look at the <a target="_blank" rel="noopener" href="https://github.com/fastai/fastai_dev/blob/master/dev_nb/mnist_sample.ipynb">mnist_sample
-notebook</a>_.</p>
-<p>Of course, there are many things you'll want to add, such as data
-augmentation, hyperparameter tuning, monitoring training, transfer
-learning, and so forth. These features are available in the fastai
-library, which has been developed using the same design approach shown
-in this tutorial, providing a natural next step for practitioners
-looking to take their models further.</p>
-<p>We promised at the start of this tutorial we'd explain through
-example each of <code>torch.nn</code>, <code>torch.optim</code>,
-<code>Dataset</code>, and <code>DataLoader</code>. So let's summarize
-what we've seen:</p>
+<h2 id="Closing-thoughts"><a href="#Closing-thoughts" class="headerlink" title="Closing thoughts"></a>Closing thoughts</h2><p>We now have a general data pipeline and training loop which you can use for<br>training many types of models using Pytorch. To see how simple training a model<br>can now be, take a look at the <a target="_blank" rel="noopener" href="https://github.com/fastai/fastai_dev/blob/master/dev_nb/mnist_sample.ipynb">mnist_sample notebook</a>_.</p>
+<p>Of course, there are many things you’ll want to add, such as data augmentation,<br>hyperparameter tuning, monitoring training, transfer learning, and so forth.<br>These features are available in the fastai library, which has been developed<br>using the same design approach shown in this tutorial, providing a natural<br>next step for practitioners looking to take their models further.</p>
+<p>We promised at the start of this tutorial we’d explain through example each of<br><code>torch.nn</code>, <code>torch.optim</code>, <code>Dataset</code>, and <code>DataLoader</code>. So let’s summarize<br>what we’ve seen:</p>
 <ul>
 <li><p><code>torch.nn</code>:</p>
 <ul>
-<li><code>Module</code>: creates a callable which behaves like a
-function, but can also contain state(such as neural net layer weights).
-It knows what <code>Parameter</code> (s) it contains and can zero all
-their gradients, loop through them for weight updates, etc.</li>
-<li><code>Parameter</code>: a wrapper for a tensor that tells a
-<code>Module</code> that it has weights that need updating during
-backprop. Only tensors with the <code>requires_grad</code> attribute set
-are updated</li>
-<li><code>functional</code>: a module(usually imported into the
-<code>F</code> namespace by convention) which contains activation
-functions, loss functions, etc, as well as non-stateful versions of
-layers such as convolutional and linear layers.</li>
-</ul></li>
-<li><p><code>torch.optim</code>: Contains optimizers such as
-<code>SGD</code>, which update the weights of <code>Parameter</code>
-during the backward step</p></li>
-<li><p><code>Dataset</code>: An abstract interface of objects with a
-<code>__len__</code> and a <code>__getitem__</code>, including classes
-provided with Pytorch such as <code>TensorDataset</code></p></li>
-<li><p><code>DataLoader</code>: Takes any <code>Dataset</code> and
-creates an iterator which returns batches of data.</p></li>
+<li><code>Module</code>: creates a callable which behaves like a function, but can also<br>contain state(such as neural net layer weights). It knows what <code>Parameter</code> (s) it<br>contains and can zero all their gradients, loop through them for weight updates, etc.</li>
+<li><code>Parameter</code>: a wrapper for a tensor that tells a <code>Module</code> that it has weights<br>that need updating during backprop. Only tensors with the <code>requires_grad</code> attribute set are updated</li>
+<li><code>functional</code>: a module(usually imported into the <code>F</code> namespace by convention)<br>which contains activation functions, loss functions, etc, as well as non-stateful<br>versions of layers such as convolutional and linear layers.</li>
+</ul>
+</li>
+<li><code>torch.optim</code>: Contains optimizers such as <code>SGD</code>, which update the weights<br>of <code>Parameter</code> during the backward step</li>
+<li><code>Dataset</code>: An abstract interface of objects with a <code>__len__</code> and a <code>__getitem__</code>,<br>including classes provided with Pytorch such as <code>TensorDataset</code></li>
+<li><code>DataLoader</code>: Takes any <code>Dataset</code> and creates an iterator which returns batches of data.</li>
 </ul>
 
     </div>
