@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ianafp.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.17.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":{"gitalk":{"order":-1}},"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="使用ResNet18在CIFAR10上训练 处理数据集 这里先处理data_batch_1中的一万个数据 按照官网中的说明使用unpickle函数进行读取,然后使用TensorDataset进行封装。 另外这里有一个细节，由于数据集中我们的训练数据是五万张图像，如果读取出来的五万张图像的List直接转为张量，那么速度会很慢，我们先使用numpy.array()将ndarray的list转化">
+<meta property="og:type" content="website">
+<meta property="og:title" content="ianafp&#39;s blog">
+<meta property="og:url" content="https://ianafp.github.io/code/resnet18.html">
+<meta property="og:site_name" content="ianafp&#39;s blog">
+<meta property="og:description" content="使用ResNet18在CIFAR10上训练 处理数据集 这里先处理data_batch_1中的一万个数据 按照官网中的说明使用unpickle函数进行读取,然后使用TensorDataset进行封装。 另外这里有一个细节，由于数据集中我们的训练数据是五万张图像，如果读取出来的五万张图像的List直接转为张量，那么速度会很慢，我们先使用numpy.array()将ndarray的list转化">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-07-15T10:37:48.157Z">
+<meta property="article:modified_time" content="2023-07-15T10:37:48.157Z">
+<meta property="article:author" content="ianafp">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://ianafp.github.io/code/resnet18">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":false,"lang":"zh-CN","comments":true,"permalink":"https://ianafp.github.io/code/resnet18.html","path":"code/resnet18.html","title":""}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title> | ianafp's blog
+</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">ianafp's blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8resnet18%E5%9C%A8cifar10%E4%B8%8A%E8%AE%AD%E7%BB%83"><span class="nav-number">1.</span> <span class="nav-text">使用ResNet18在CIFAR10上训练</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%84%E7%90%86%E6%95%B0%E6%8D%AE%E9%9B%86"><span class="nav-number">1.1.</span> <span class="nav-text">处理数据集</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8torchvison%E4%B8%AD%E7%9A%84resnet18"><span class="nav-number">1.2.</span> <span class="nav-text">使用torchvison中的ResNet18</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%86%E6%A8%A1%E5%9E%8B%E9%83%A8%E7%BD%B2%E5%9C%A8gpu%E4%B8%8A"><span class="nav-number">1.3.</span> <span class="nav-text">将模型部署在GPU上</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">ianafp</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">7</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner page posts-expand">
+
+
+    
+    
+    
+    <div class="post-block" lang="zh-CN"><header class="post-header">
+
+<h1 class="post-title" itemprop="name headline">
+</h1>
+
+<div class="post-meta-container">
+</div>
+
+</header>
+
+      
+      
+      <div class="post-body">
+          <h1 id="使用resnet18在cifar10上训练">使用ResNet18在CIFAR10上训练</h1>
+<h2 id="处理数据集">处理数据集</h2>
+<p>这里先处理data_batch_1中的一万个数据
+按照官网中的说明使用unpickle函数进行读取,然后使用TensorDataset进行封装。
+另外这里有一个细节，由于数据集中我们的训练数据是五万张图像，如果读取出来的五万张图像的List直接转为张量，那么速度会很慢，我们先使用numpy.array()将ndarray的list转化为single
+ndarray，转为张量的过程就会显著加速。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">PATH = <span class="string">&#x27;ianafp/CIFAR10/cifar-10-batches-py/data_batch_&#x27;</span></span><br><span class="line">TEST_BATCH = <span class="string">&#x27;ianafp/CIFAR10/cifar-10-batches-py/test_batch&#x27;</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">unpickle</span>(<span class="params">file</span>):</span><br><span class="line">    <span class="keyword">import</span> pickle</span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(file, <span class="string">&#x27;rb&#x27;</span>) <span class="keyword">as</span> fo:</span><br><span class="line">        <span class="built_in">dict</span> = pickle.load(fo, encoding=<span class="string">&#x27;bytes&#x27;</span>)</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">dict</span></span><br><span class="line">x_train,y_train = [],[]</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>,<span class="number">6</span>):</span><br><span class="line">    dataset = unpickle(PATH+<span class="string">&#x27;&#123;&#125;&#x27;</span>.<span class="built_in">format</span>(i))</span><br><span class="line">    <span class="comment"># print(dataset.keys())</span></span><br><span class="line">    x_train.extend(dataset[<span class="string">b&#x27;data&#x27;</span>])</span><br><span class="line">    y_train.extend(dataset[<span class="string">b&#x27;labels&#x27;</span>])</span><br><span class="line">dataset = unpickle(TEST_BATCH)</span><br><span class="line">x_valid,y_valid = dataset[<span class="string">b&#x27;data&#x27;</span>],dataset[<span class="string">b&#x27;labels&#x27;</span>]</span><br></pre></td></tr></table></figure>
+<p>测试数据有效性</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">print</span>(x_train.__len__())</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> matplotlib <span class="keyword">import</span> pyplot</span><br><span class="line">img = np.reshape(x_valid[<span class="number">8000</span>],(<span class="number">3</span>,<span class="number">32</span>,<span class="number">32</span>))</span><br><span class="line">img = np.transpose(img,(<span class="number">1</span>,<span class="number">2</span>,<span class="number">0</span>))</span><br><span class="line">pyplot.imshow(img)</span><br></pre></td></tr></table></figure>
+<p>将数据使用dataset和dataloader类进行封装</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> torch.utils.data <span class="keyword">import</span> TensorDataset,DataLoader</span><br><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(x_train.__len__())</span><br><span class="line">batch_size = <span class="number">256</span> </span><br><span class="line">x_train = np.array(x_train)</span><br><span class="line">y_train = np.array(y_train)</span><br><span class="line">x_valid = np.array(x_valid)</span><br><span class="line">y_valid = np.array(y_valid)</span><br><span class="line">x_train = np.reshape(x_train,(x_train.__len__(),<span class="number">3</span>,<span class="number">32</span>,<span class="number">32</span>))</span><br><span class="line">x_valid = np.reshape(x_valid,(x_valid.__len__(),<span class="number">3</span>,<span class="number">32</span>,<span class="number">32</span>))</span><br><span class="line">train_ds = TensorDataset(torch.tensor(x_train,dtype=torch.<span class="built_in">float</span>),torch.tensor(y_train,dtype=torch.<span class="built_in">float</span>))</span><br><span class="line">train_dl = DataLoader(train_ds,batch_size=batch_size)</span><br><span class="line">valid_ds = TensorDataset(torch.tensor(x_valid,dtype=torch.<span class="built_in">float</span>),torch.tensor(y_valid,dtype=torch.<span class="built_in">float</span>))</span><br><span class="line">valid_dl = DataLoader(valid_ds,batch_size=batch_size*<span class="number">2</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="使用torchvison中的resnet18">使用torchvison中的ResNet18</h2>
+<p>这里我们使用torchvision中的ResNet model</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> torchvision.models <span class="keyword">import</span> resnet18,ResNet18_Weights</span><br><span class="line">model = resnet18()</span><br></pre></td></tr></table></figure>
+<p>设置损失函数，这里我们使用交叉熵损失函数(croos entropy error) <span class="math display">\[
+E = - \sum_k t_k \log y_k
+\]</span> 其中，<span class="math inline">\(t_k\)</span>为label,<span class="math inline">\(y_k\)</span>为网络输出值
+这里实现使用torch.nn.functional中封装好的交叉熵函数</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch.nn.functional <span class="keyword">as</span> F</span><br><span class="line">loss_func = F.cross_entropy</span><br></pre></td></tr></table></figure>
+<p>实现一个准确率函数</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">accuracy</span>(<span class="params">out, yb</span>):</span><br><span class="line">    preds = torch.argmax(out, dim=<span class="number">1</span>)</span><br><span class="line">    <span class="keyword">return</span> (preds == yb).<span class="built_in">float</span>().mean()</span><br></pre></td></tr></table></figure>
+<p>在训练前检验我们模型的损失函数值和准确率。
+这里面要注意的点是pytorch卷积层是以浮点数工作的，而我们从图像中读取的训练数据集是byte类型的，因而我们要对tensor作类型转化。
+另外torch.nn.functional中的交叉熵损失函数F.cross_entropy中标签以long类型工作，因而也需要作类型转化。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">x,y = train_ds[<span class="number">0</span>:batch_size]</span><br><span class="line">pred = model(x)</span><br><span class="line"><span class="built_in">print</span>(pred.dtype,y.dtype)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;loss_func = &#x27;</span>,loss_func(pred,y.long()))</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;accuracy = &#x27;</span>,accuracy(pred,y))</span><br></pre></td></tr></table></figure>
+<p>使用torch.optim进行梯度下降优化</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> torch <span class="keyword">import</span> optim</span><br><span class="line">learning_rate = <span class="number">0.5</span></span><br><span class="line">opt = optim.SGD(model.parameters(),lr=learning_rate)</span><br><span class="line">epochs = <span class="number">8</span></span><br></pre></td></tr></table></figure>
+<p>定义随机梯度下降函数</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">loss_batch</span>(<span class="params">model,loss_func,xb,yb,opt=<span class="literal">None</span></span>):</span><br><span class="line">    loss = loss_func(model(xb),yb.long())</span><br><span class="line">    <span class="keyword">if</span> opt <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">        loss.backward()</span><br><span class="line">        opt.step()</span><br><span class="line">        opt.zero_grad()</span><br><span class="line">    <span class="keyword">return</span> loss.item(),<span class="built_in">len</span>(xb)</span><br></pre></td></tr></table></figure>
+<p>定义fit函数，fit函数中完成训练过程</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># def fit(epochs,model,loss_func,opt,train_dl,valid_dl):</span></span><br><span class="line"><span class="comment">#     for epoch in range(epochs):</span></span><br><span class="line"><span class="comment">#         model.train()</span></span><br><span class="line"><span class="comment">#         for xb,yb in train_dl:</span></span><br><span class="line"><span class="comment">#             loss_batch(model,loss_func,xb,yb.long(),opt)</span></span><br><span class="line"><span class="comment">#         model.eval()</span></span><br><span class="line"><span class="comment">#         with torch.no_grad():</span></span><br><span class="line"><span class="comment">#             losses,nums = zip(*[loss_batch(model,loss_func,xb,yb) for xb,yb in valid_dl])</span></span><br><span class="line"><span class="comment">#         val_loss = np.sum(np.multiply(losses,nums)) / np.sum(nums)</span></span><br><span class="line"><span class="comment">#         print(epoch,val_loss)</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">fit</span>(<span class="params">epochs,model,loss_func,opt,train_dl,valid_dl</span>):</span><br><span class="line">    epoch = <span class="number">0</span></span><br><span class="line">    pre_loss = <span class="number">0</span></span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">        model.train()</span><br><span class="line">        <span class="keyword">for</span> xb,yb <span class="keyword">in</span> train_dl:</span><br><span class="line">            loss_batch(model,loss_func,xb,yb.long(),opt)</span><br><span class="line">        model.<span class="built_in">eval</span>()</span><br><span class="line">        <span class="keyword">with</span> torch.no_grad():</span><br><span class="line">            losses,nums = <span class="built_in">zip</span>(*[loss_batch(model,loss_func,xb,yb) <span class="keyword">for</span> xb,yb <span class="keyword">in</span> valid_dl])</span><br><span class="line">        val_loss = np.<span class="built_in">sum</span>(np.multiply(losses,nums)) / np.<span class="built_in">sum</span>(nums)</span><br><span class="line">        <span class="built_in">print</span>(epoch,val_loss)</span><br><span class="line">        <span class="keyword">import</span> math </span><br><span class="line">        <span class="keyword">if</span> math.fabs(val_loss-pre_loss)&lt;<span class="number">1e-9</span>:</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        pre_loss = val_loss</span><br><span class="line">        epoch = epoch + <span class="number">1</span></span><br></pre></td></tr></table></figure>
+<p>试运行训练函数fit</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># fit(epochs,model,loss_func,opt,train_dl,valid_dl)</span></span><br></pre></td></tr></table></figure>
+<p>运行时间过长。</p>
+<h2 id="将模型部署在gpu上">将模型部署在GPU上</h2>
+<p>检验cuda是否可用</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">print</span>(torch.cuda.is_available())</span><br><span class="line">dev = torch.device(<span class="string">&#x27;cuda&#x27;</span>) <span class="keyword">if</span> torch.cuda.is_available() <span class="keyword">else</span> torch.device(<span class="string">&#x27;cpu&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<p>将数据集迁移到GPU
+这里使用的技巧是定义了WrappedDataLoader类，该类是可迭代的，因为定义了__iter__方法。
+又因为__iter__方法中使用了关键字yield，因而该类可做生成器(generater)。
+在后续 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> x,y <span class="keyword">in</span> train_dl:</span><br><span class="line">    ...</span><br></pre></td></tr></table></figure> 的过程中会动态的将数据应用preprocess方法返回。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">preprocess</span>(<span class="params">x,y</span>):</span><br><span class="line">    <span class="keyword">return</span> x.to(dev),y.to(dev)</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">WrappedDataLoader</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, dl, func</span>):</span><br><span class="line">        self.dl = dl</span><br><span class="line">        self.func = func</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__len__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">len</span>(self.dl)</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__iter__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">for</span> b <span class="keyword">in</span> self.dl:</span><br><span class="line">            <span class="keyword">yield</span> (self.func(*b))</span><br><span class="line">train_dl = WrappedDataLoader(train_dl,preprocess)</span><br><span class="line">valid_dl = WrappedDataLoader(valid_dl,preprocess)</span><br></pre></td></tr></table></figure>
+<p>将模型迁移到GPU</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">model.to(dev)</span><br><span class="line">opt = optim.SGD(model.parameters(), lr=learning_rate, momentum=<span class="number">0.9</span>)</span><br></pre></td></tr></table></figure>
+<p>试运行训练</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fit(epochs, model, loss_func, opt, train_dl, valid_dl)</span><br></pre></td></tr></table></figure>
+<p>检验准确率</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">x,y = valid_ds[<span class="number">0</span>:batch_size]</span><br><span class="line">x = x.to(dev)</span><br><span class="line">y = y.to(dev)</span><br><span class="line">pred = model(x)</span><br><span class="line"><span class="built_in">print</span>(pred.dtype,y.dtype)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;loss_func = &#x27;</span>,loss_func(pred,y.long()))</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;accuracy = &#x27;</span>,accuracy(pred,y))</span><br></pre></td></tr></table></figure>
+<p>运行结果表明，固定训练轮次准确率较低，若以<span class="math inline">\(1\times
+10^{-9}\)</span>为损失函数的收敛阈值，则运行无法收敛，具体原因暂未得知。</p>
+
+      </div>
+      
+      
+      
+    </div>
+
+    
+    
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">ianafp</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"ianafp","repo":"blog-comments","client_id":"3246cd13c465b0ae6f16","client_secret":"b25bc48b816eef1c4c5ada6fd132f6261d14c999","admin_user":"ianafp","distraction_free_mode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"d96db52566ec0b48ffdf78be874d4467"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>
