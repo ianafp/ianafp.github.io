@@ -139,7 +139,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%84%E7%90%86%E6%95%B0%E6%8D%AE%E9%9B%86"><span class="nav-number">1.</span> <span class="nav-text">处理数据集</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8torchvison%E4%B8%AD%E7%9A%84resnet18"><span class="nav-number">2.</span> <span class="nav-text">使用torchvison中的ResNet18</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%86%E6%A8%A1%E5%9E%8B%E9%83%A8%E7%BD%B2%E5%9C%A8gpu%E4%B8%8A"><span class="nav-number">3.</span> <span class="nav-text">将模型部署在GPU上</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8ResNet18%E5%9C%A8CIFAR10%E4%B8%8A%E8%AE%AD%E7%BB%83"><span class="nav-number">1.</span> <span class="nav-text">使用ResNet18在CIFAR10上训练</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%84%E7%90%86%E6%95%B0%E6%8D%AE%E9%9B%86"><span class="nav-number">1.1.</span> <span class="nav-text">处理数据集</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8torchvison%E4%B8%AD%E7%9A%84ResNet18"><span class="nav-number">1.2.</span> <span class="nav-text">使用torchvison中的ResNet18</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%86%E6%A8%A1%E5%9E%8B%E9%83%A8%E7%BD%B2%E5%9C%A8GPU%E4%B8%8A"><span class="nav-number">1.3.</span> <span class="nav-text">将模型部署在GPU上</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -152,13 +152,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">7</span>
+          <span class="site-state-item-count">9</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-count">6</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -227,31 +227,22 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><p>这篇文章是我入门pytorch的第一个实验，实验torchvision中的resnet18在CIFAR数据集上进行训练
-<span id="more"></span> # 使用ResNet18在CIFAR10上训练</p>
-<h2 id="处理数据集">处理数据集</h2>
-<p>这里先处理data_batch_1中的一万个数据
-按照官网中的说明使用unpickle函数进行读取,然后使用TensorDataset进行封装。
-另外这里有一个细节，由于数据集中我们的训练数据是五万张图像，如果读取出来的五万张图像的List直接转为张量，那么速度会很慢，我们先使用numpy.array()将ndarray的list转化为single
-ndarray，转为张量的过程就会显著加速。</p>
+    <div class="post-body" itemprop="articleBody"><p>这篇文章是我入门pytorch的第一个实验，实验torchvision中的resnet18在CIFAR数据集上进行训练<br><span id="more"></span></p>
+<h1 id="使用ResNet18在CIFAR10上训练"><a href="#使用ResNet18在CIFAR10上训练" class="headerlink" title="使用ResNet18在CIFAR10上训练"></a>使用ResNet18在CIFAR10上训练</h1><h2 id="处理数据集"><a href="#处理数据集" class="headerlink" title="处理数据集"></a>处理数据集</h2><p>这里先处理data_batch_1中的一万个数据<br>按照官网中的说明使用unpickle函数进行读取,然后使用TensorDataset进行封装。<br>另外这里有一个细节，由于数据集中我们的训练数据是五万张图像，如果读取出来的五万张图像的List直接转为张量，那么速度会很慢，我们先使用numpy.array()将ndarray的list转化为single ndarray，转为张量的过程就会显著加速。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">PATH = <span class="string">&#x27;ianafp/CIFAR10/cifar-10-batches-py/data_batch_&#x27;</span></span><br><span class="line">TEST_BATCH = <span class="string">&#x27;ianafp/CIFAR10/cifar-10-batches-py/test_batch&#x27;</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">unpickle</span>(<span class="params">file</span>):</span><br><span class="line">    <span class="keyword">import</span> pickle</span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(file, <span class="string">&#x27;rb&#x27;</span>) <span class="keyword">as</span> fo:</span><br><span class="line">        <span class="built_in">dict</span> = pickle.load(fo, encoding=<span class="string">&#x27;bytes&#x27;</span>)</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">dict</span></span><br><span class="line">x_train,y_train = [],[]</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>,<span class="number">6</span>):</span><br><span class="line">    dataset = unpickle(PATH+<span class="string">&#x27;&#123;&#125;&#x27;</span>.<span class="built_in">format</span>(i))</span><br><span class="line">    <span class="comment"># print(dataset.keys())</span></span><br><span class="line">    x_train.extend(dataset[<span class="string">b&#x27;data&#x27;</span>])</span><br><span class="line">    y_train.extend(dataset[<span class="string">b&#x27;labels&#x27;</span>])</span><br><span class="line">dataset = unpickle(TEST_BATCH)</span><br><span class="line">x_valid,y_valid = dataset[<span class="string">b&#x27;data&#x27;</span>],dataset[<span class="string">b&#x27;labels&#x27;</span>]</span><br></pre></td></tr></table></figure>
 <p>测试数据有效性</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">print</span>(x_train.__len__())</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> matplotlib <span class="keyword">import</span> pyplot</span><br><span class="line">img = np.reshape(x_valid[<span class="number">8000</span>],(<span class="number">3</span>,<span class="number">32</span>,<span class="number">32</span>))</span><br><span class="line">img = np.transpose(img,(<span class="number">1</span>,<span class="number">2</span>,<span class="number">0</span>))</span><br><span class="line">pyplot.imshow(img)</span><br></pre></td></tr></table></figure>
 <p>将数据使用dataset和dataloader类进行封装</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> torch.utils.data <span class="keyword">import</span> TensorDataset,DataLoader</span><br><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(x_train.__len__())</span><br><span class="line">batch_size = <span class="number">256</span> </span><br><span class="line">x_train = np.array(x_train)</span><br><span class="line">y_train = np.array(y_train)</span><br><span class="line">x_valid = np.array(x_valid)</span><br><span class="line">y_valid = np.array(y_valid)</span><br><span class="line">x_train = np.reshape(x_train,(x_train.__len__(),<span class="number">3</span>,<span class="number">32</span>,<span class="number">32</span>))</span><br><span class="line">x_valid = np.reshape(x_valid,(x_valid.__len__(),<span class="number">3</span>,<span class="number">32</span>,<span class="number">32</span>))</span><br><span class="line">train_ds = TensorDataset(torch.tensor(x_train,dtype=torch.<span class="built_in">float</span>),torch.tensor(y_train,dtype=torch.<span class="built_in">float</span>))</span><br><span class="line">train_dl = DataLoader(train_ds,batch_size=batch_size)</span><br><span class="line">valid_ds = TensorDataset(torch.tensor(x_valid,dtype=torch.<span class="built_in">float</span>),torch.tensor(y_valid,dtype=torch.<span class="built_in">float</span>))</span><br><span class="line">valid_dl = DataLoader(valid_ds,batch_size=batch_size*<span class="number">2</span>)</span><br></pre></td></tr></table></figure>
-<h2 id="使用torchvison中的resnet18">使用torchvison中的ResNet18</h2>
-<p>这里我们使用torchvision中的ResNet model</p>
+<h2 id="使用torchvison中的ResNet18"><a href="#使用torchvison中的ResNet18" class="headerlink" title="使用torchvison中的ResNet18"></a>使用torchvison中的ResNet18</h2><p>这里我们使用torchvision中的ResNet model</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> torchvision.models <span class="keyword">import</span> resnet18,ResNet18_Weights</span><br><span class="line">model = resnet18()</span><br></pre></td></tr></table></figure>
-<p>设置损失函数，这里我们使用交叉熵损失函数(croos entropy error) <span class="math display">\[
-E = - \sum_k t_k \log y_k
-\]</span> 其中，<span class="math inline">\(t_k\)</span>为label,<span class="math inline">\(y_k\)</span>为网络输出值
-这里实现使用torch.nn.functional中封装好的交叉熵函数</p>
+<p>设置损失函数，这里我们使用交叉熵损失函数(croos entropy error)</p>
+<script type="math/tex; mode=display">
+E = - \sum_k t_k \log y_k</script><p>其中，$t_k$为label,$y_k$为网络输出值<br>这里实现使用torch.nn.functional中封装好的交叉熵函数</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch.nn.functional <span class="keyword">as</span> F</span><br><span class="line">loss_func = F.cross_entropy</span><br></pre></td></tr></table></figure>
 <p>实现一个准确率函数</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">accuracy</span>(<span class="params">out, yb</span>):</span><br><span class="line">    preds = torch.argmax(out, dim=<span class="number">1</span>)</span><br><span class="line">    <span class="keyword">return</span> (preds == yb).<span class="built_in">float</span>().mean()</span><br></pre></td></tr></table></figure>
-<p>在训练前检验我们模型的损失函数值和准确率。
-这里面要注意的点是pytorch卷积层是以浮点数工作的，而我们从图像中读取的训练数据集是byte类型的，因而我们要对tensor作类型转化。
-另外torch.nn.functional中的交叉熵损失函数F.cross_entropy中标签以long类型工作，因而也需要作类型转化。</p>
+<p>在训练前检验我们模型的损失函数值和准确率。<br>这里面要注意的点是pytorch卷积层是以浮点数工作的，而我们从图像中读取的训练数据集是byte类型的，因而我们要对tensor作类型转化。<br>另外torch.nn.functional中的交叉熵损失函数F.cross_entropy中标签以long类型工作，因而也需要作类型转化。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">x,y = train_ds[<span class="number">0</span>:batch_size]</span><br><span class="line">pred = model(x)</span><br><span class="line"><span class="built_in">print</span>(pred.dtype,y.dtype)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;loss_func = &#x27;</span>,loss_func(pred,y.long()))</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;accuracy = &#x27;</span>,accuracy(pred,y))</span><br></pre></td></tr></table></figure>
 <p>使用torch.optim进行梯度下降优化</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> torch <span class="keyword">import</span> optim</span><br><span class="line">learning_rate = <span class="number">0.5</span></span><br><span class="line">opt = optim.SGD(model.parameters(),lr=learning_rate)</span><br><span class="line">epochs = <span class="number">8</span></span><br></pre></td></tr></table></figure>
@@ -262,13 +253,9 @@ E = - \sum_k t_k \log y_k
 <p>试运行训练函数fit</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># fit(epochs,model,loss_func,opt,train_dl,valid_dl)</span></span><br></pre></td></tr></table></figure>
 <p>运行时间过长。</p>
-<h2 id="将模型部署在gpu上">将模型部署在GPU上</h2>
-<p>检验cuda是否可用</p>
+<h2 id="将模型部署在GPU上"><a href="#将模型部署在GPU上" class="headerlink" title="将模型部署在GPU上"></a>将模型部署在GPU上</h2><p>检验cuda是否可用</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">print</span>(torch.cuda.is_available())</span><br><span class="line">dev = torch.device(<span class="string">&#x27;cuda&#x27;</span>) <span class="keyword">if</span> torch.cuda.is_available() <span class="keyword">else</span> torch.device(<span class="string">&#x27;cpu&#x27;</span>)</span><br></pre></td></tr></table></figure>
-<p>将数据集迁移到GPU
-这里使用的技巧是定义了WrappedDataLoader类，该类是可迭代的，因为定义了__iter__方法。
-又因为__iter__方法中使用了关键字yield，因而该类可做生成器(generater)。
-在后续 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> x,y <span class="keyword">in</span> train_dl:</span><br><span class="line">    ...</span><br></pre></td></tr></table></figure> 的过程中会动态的将数据应用preprocess方法返回。</p>
+<p>将数据集迁移到GPU<br>这里使用的技巧是定义了WrappedDataLoader类，该类是可迭代的，因为定义了<strong>iter</strong>方法。<br>又因为<strong>iter</strong>方法中使用了关键字yield，因而该类可做生成器(generater)。<br>在后续<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> x,y <span class="keyword">in</span> train_dl:</span><br><span class="line">    ...</span><br></pre></td></tr></table></figure><br>的过程中会动态的将数据应用preprocess方法返回。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">preprocess</span>(<span class="params">x,y</span>):</span><br><span class="line">    <span class="keyword">return</span> x.to(dev),y.to(dev)</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">WrappedDataLoader</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, dl, func</span>):</span><br><span class="line">        self.dl = dl</span><br><span class="line">        self.func = func</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__len__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">len</span>(self.dl)</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__iter__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">for</span> b <span class="keyword">in</span> self.dl:</span><br><span class="line">            <span class="keyword">yield</span> (self.func(*b))</span><br><span class="line">train_dl = WrappedDataLoader(train_dl,preprocess)</span><br><span class="line">valid_dl = WrappedDataLoader(valid_dl,preprocess)</span><br></pre></td></tr></table></figure>
 <p>将模型迁移到GPU</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">model.to(dev)</span><br><span class="line">opt = optim.SGD(model.parameters(), lr=learning_rate, momentum=<span class="number">0.9</span>)</span><br></pre></td></tr></table></figure>
@@ -276,8 +263,7 @@ E = - \sum_k t_k \log y_k
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fit(epochs, model, loss_func, opt, train_dl, valid_dl)</span><br></pre></td></tr></table></figure>
 <p>检验准确率</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">x,y = valid_ds[<span class="number">0</span>:batch_size]</span><br><span class="line">x = x.to(dev)</span><br><span class="line">y = y.to(dev)</span><br><span class="line">pred = model(x)</span><br><span class="line"><span class="built_in">print</span>(pred.dtype,y.dtype)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;loss_func = &#x27;</span>,loss_func(pred,y.long()))</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;accuracy = &#x27;</span>,accuracy(pred,y))</span><br></pre></td></tr></table></figure>
-<p>运行结果表明，固定训练轮次准确率较低，若以<span class="math inline">\(1\times
-10^{-9}\)</span>为损失函数的收敛阈值，则运行无法收敛，具体原因暂未得知。</p>
+<p>运行结果表明，固定训练轮次准确率较低，若以$1\times 10^{-9}$为损失函数的收敛阈值，则运行无法收敛，具体原因暂未得知。</p>
 
     </div>
 
@@ -299,6 +285,9 @@ E = - \sum_k t_k \log y_k
                 </a>
             </div>
             <div class="post-nav-item">
+                <a href="/2023/07/17/%E5%AD%A6%E4%B9%A0%E7%8E%87%E8%B0%83%E6%95%B4%E6%96%B9%E6%B3%95/" rel="next" title="学习率调整方法">
+                  学习率调整方法 <i class="fa fa-chevron-right"></i>
+                </a>
             </div>
           </div>
     </footer>

@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ianafp.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.17.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":{"gitalk":{"order":-1}},"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="这一篇文章是我阅读论文《Efficientnet: Rethinking model scaling for convolutional neural》的记录。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PaperReading:Efficientnet: Rethinking model scaling for convolutional neural networks">
+<meta property="og:url" content="https://ianafp.github.io/2023/07/21/PaperReading-Efficientnet-Rethinking-model-scaling-for-convolutional-neural-networks/index.html">
+<meta property="og:site_name" content="ianafp&#39;s blog">
+<meta property="og:description" content="这一篇文章是我阅读论文《Efficientnet: Rethinking model scaling for convolutional neural》的记录。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://ianafp.github.io/2023/07/21/PaperReading-Efficientnet-Rethinking-model-scaling-for-convolutional-neural-networks/image-20230721152752404.png">
+<meta property="article:published_time" content="2023-07-21T06:10:55.000Z">
+<meta property="article:modified_time" content="2023-07-21T07:53:53.659Z">
+<meta property="article:author" content="ianafp">
+<meta property="article:tag" content="PaperReading">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ianafp.github.io/2023/07/21/PaperReading-Efficientnet-Rethinking-model-scaling-for-convolutional-neural-networks/image-20230721152752404.png">
+
+
+<link rel="canonical" href="https://ianafp.github.io/2023/07/21/PaperReading-Efficientnet-Rethinking-model-scaling-for-convolutional-neural-networks/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://ianafp.github.io/2023/07/21/PaperReading-Efficientnet-Rethinking-model-scaling-for-convolutional-neural-networks/","path":"2023/07/21/PaperReading-Efficientnet-Rethinking-model-scaling-for-convolutional-neural-networks/","title":"PaperReading:Efficientnet: Rethinking model scaling for convolutional neural networks"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>PaperReading:Efficientnet: Rethinking model scaling for convolutional neural networks | ianafp's blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">ianafp's blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#abstract"><span class="nav-number">1.</span> <span class="nav-text">abstract</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#introduction"><span class="nav-number">2.</span> <span class="nav-text">introduction</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Related-Work"><span class="nav-number">3.</span> <span class="nav-text">Related Work</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ConvNet-Accuracy"><span class="nav-number">3.1.</span> <span class="nav-text">ConvNet Accuracy</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ConvNet-Efficiency"><span class="nav-number">3.2.</span> <span class="nav-text">ConvNet Efficiency</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Model-Scaling"><span class="nav-number">3.3.</span> <span class="nav-text">Model Scaling</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Compound-Model-Scaling"><span class="nav-number">4.</span> <span class="nav-text">Compound Model Scaling</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Efficient-Achitecture"><span class="nav-number">5.</span> <span class="nav-text">Efficient Achitecture</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Experiments"><span class="nav-number">6.</span> <span class="nav-text">Experiments</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Discussion"><span class="nav-number">7.</span> <span class="nav-text">Discussion</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">ianafp</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://ianafp.github.io/2023/07/21/PaperReading-Efficientnet-Rethinking-model-scaling-for-convolutional-neural-networks/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="ianafp">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ianafp's blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="PaperReading:Efficientnet: Rethinking model scaling for convolutional neural networks | ianafp's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          PaperReading:Efficientnet: Rethinking model scaling for convolutional neural networks
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2023-07-21 14:10:55 / 修改时间：15:53:53" itemprop="dateCreated datePublished" datetime="2023-07-21T14:10:55+08:00">2023-07-21</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>这一篇文章是我阅读论文《Efficientnet: Rethinking model scaling for convolutional neural》的记录。    </p>
+<span id="more"></span>
+<h2 id="abstract"><a href="#abstract" class="headerlink" title="abstract"></a>abstract</h2><p>摘要部分说明了该论文的内容，本论文提出一种模型缩放的方式并应用于MobileNet和ResNet上以证明有效性, 更进一步，本文设计出了Efficient Nets, 相比于传统的CNN具有更好的效率和准确率。</p>
+<p>源码于:</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/tensorflow/tpu/tree/master/models/official/efficientnet">tpu/models/official/efficientnet at master · tensorflow/tpu (github.com)</a></p>
+<h2 id="introduction"><a href="#introduction" class="headerlink" title="introduction"></a>introduction</h2><p><img src="/2023/07/21/PaperReading-Efficientnet-Rethinking-model-scaling-for-convolutional-neural-networks/image-20230721152752404.png" alt="image-20230721152752404"></p>
+<p>introduction部分的主题思想大概是他们初步的经验化的找到了量化网络的深度宽度和分辨率的方法，即当计算资源扩大$2^N$倍时，网络的深度，宽度，以及分辨率分别扩大$\alpha ^N,\beta ^N,\gamma ^N $倍数 ,而$\alpha,\beta,\gamma$分别由原始网络上的a small grid search决定。</p>
+<blockquote>
+<p>For example, if we want to use 2N times more computational resources, then we can simply increase the network depth by  αN , width by βN , and image size by γN , where α, β, γ are constant coefficients determined by a small grid search on the original small model. Figure 2 illustrates the difference between our scaling method and conventional methods</p>
+</blockquote>
+<p>而模型拓展的效率对原始模型的依赖程度很大，因而作者使用neural architecture search来编写了一些列baseline network, 命名为efficient net</p>
+<blockquote>
+<p>Notably, the effectiveness of model scaling heavily depends on the baseline network; to<br>go even further, we use neural architecture search (Zoph &amp; Le, 2017; Tan et al., 2019) to develop a new baseline network, and scale it up to obtain a family of models, called EfficientNets. </p>
+</blockquote>
+<h2 id="Related-Work"><a href="#Related-Work" class="headerlink" title="Related Work"></a>Related Work</h2><h3 id="ConvNet-Accuracy"><a href="#ConvNet-Accuracy" class="headerlink" title="ConvNet Accuracy"></a>ConvNet Accuracy</h3><p>目前以增大模型参数规模的方式提升accuracy已经进入瓶颈。</p>
+<blockquote>
+<p>Notably, the effectiveness of model scaling heavily depends on the baseline network; to<br>go even further, we use neural architecture search (Zoph &amp; Le, 2017; Tan et al., 2019) to develop a new baseline network, and scale it up to obtain a family of models, called<br>EfficientNets. </p>
+</blockquote>
+<h3 id="ConvNet-Efficiency"><a href="#ConvNet-Efficiency" class="headerlink" title="ConvNet Efficiency"></a>ConvNet Efficiency</h3><p>关于卷积神经网络有许多方法可以进行accuracy和effficiency的tradeoff,因为目前的模型一般都过参数化，导致训练effficeincy很低而对accuracy的提升也很低。</p>
+<p>但是减少参数的方法是不易找到的。</p>
+<blockquote>
+<p>However, it is unclear how to apply these techniques for larger models that have much larger design space and much more expensive tuning cost. In this paper, we aim to study model efficiency for super large ConvNets that surpass state-of-the-art accuracy. To achieve this goal, we resort to model scaling.</p>
+</blockquote>
+<h3 id="Model-Scaling"><a href="#Model-Scaling" class="headerlink" title="Model Scaling"></a>Model Scaling</h3><p>对于一个模型采取适应不同计算规模的scale有许多方法，比如对于ResNet就可以进行ResNet18到ResNet200之间的伸缩。本文作者将系统化的研究和总结model scaling的方法，关于depth,width,resolution</p>
+<h2 id="Compound-Model-Scaling"><a href="#Compound-Model-Scaling" class="headerlink" title="Compound Model Scaling"></a>Compound Model Scaling</h2><h2 id="Efficient-Achitecture"><a href="#Efficient-Achitecture" class="headerlink" title="Efficient Achitecture"></a>Efficient Achitecture</h2><h2 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h2><h2 id="Discussion"><a href="#Discussion" class="headerlink" title="Discussion"></a>Discussion</h2>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/PaperReading/" rel="tag"># PaperReading</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/07/17/%E5%AD%A6%E4%B9%A0%E7%8E%87%E8%B0%83%E6%95%B4%E6%96%B9%E6%B3%95/" rel="prev" title="学习率调整方法">
+                  <i class="fa fa-chevron-left"></i> 学习率调整方法
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">ianafp</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"ianafp","repo":"blog-comments","client_id":"3246cd13c465b0ae6f16","client_secret":"b25bc48b816eef1c4c5ada6fd132f6261d14c999","admin_user":"ianafp","distraction_free_mode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"4e7a9ed550f6b6c75874f694ae58d8c4"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>

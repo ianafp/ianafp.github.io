@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ianafp.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.17.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":{"gitalk":{"order":-1}},"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="这篇文章整理了一些调整学习率的方法，并且根据上一篇文章，在CIFAR10数据集上训练ResNet18中的代码应用这些调整。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="学习率调整方法">
+<meta property="og:url" content="https://ianafp.github.io/2023/07/17/%E5%AD%A6%E4%B9%A0%E7%8E%87%E8%B0%83%E6%95%B4%E6%96%B9%E6%B3%95/index.html">
+<meta property="og:site_name" content="ianafp&#39;s blog">
+<meta property="og:description" content="这篇文章整理了一些调整学习率的方法，并且根据上一篇文章，在CIFAR10数据集上训练ResNet18中的代码应用这些调整。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-07-17T12:38:50.000Z">
+<meta property="article:modified_time" content="2023-07-20T07:55:46.981Z">
+<meta property="article:author" content="ianafp">
+<meta property="article:tag" content="pytorch">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://ianafp.github.io/2023/07/17/%E5%AD%A6%E4%B9%A0%E7%8E%87%E8%B0%83%E6%95%B4%E6%96%B9%E6%B3%95/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://ianafp.github.io/2023/07/17/%E5%AD%A6%E4%B9%A0%E7%8E%87%E8%B0%83%E6%95%B4%E6%96%B9%E6%B3%95/","path":"2023/07/17/学习率调整方法/","title":"学习率调整方法"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>学习率调整方法 | ianafp's blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">ianafp's blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#StepLR"><span class="nav-number">1.</span> <span class="nav-text">StepLR</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MULTISTEPLR"><span class="nav-number">2.</span> <span class="nav-text">MULTISTEPLR</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Expotianal-LR"><span class="nav-number">3.</span> <span class="nav-text">Expotianal LR</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Linear-LR"><span class="nav-number">4.</span> <span class="nav-text">Linear LR</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Cycle-LR"><span class="nav-number">5.</span> <span class="nav-text">Cycle LR</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#One-Cycle-Lr"><span class="nav-number">6.</span> <span class="nav-text">One Cycle Lr</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Consine-Anealing-Lr"><span class="nav-number">7.</span> <span class="nav-text">Consine Anealing Lr</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Cosine-Annealing-WarmRestarts"><span class="nav-number">8.</span> <span class="nav-text">Cosine Annealing WarmRestarts</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Lambda-Lr"><span class="nav-number">9.</span> <span class="nav-text">Lambda Lr</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Sequencial-Lr"><span class="nav-number">10.</span> <span class="nav-text">Sequencial Lr</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Chain-Scheduler"><span class="nav-number">11.</span> <span class="nav-text">Chain Scheduler</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Constant-LR"><span class="nav-number">12.</span> <span class="nav-text">Constant LR</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reduce-LR-On-Plateau"><span class="nav-number">13.</span> <span class="nav-text">Reduce LR On Plateau</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">ianafp</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://ianafp.github.io/2023/07/17/%E5%AD%A6%E4%B9%A0%E7%8E%87%E8%B0%83%E6%95%B4%E6%96%B9%E6%B3%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="ianafp">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ianafp's blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="学习率调整方法 | ianafp's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          学习率调整方法
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-07-17 20:38:50" itemprop="dateCreated datePublished" datetime="2023-07-17T20:38:50+08:00">2023-07-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-07-20 15:55:46" itemprop="dateModified" datetime="2023-07-20T15:55:46+08:00">2023-07-20</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>这篇文章整理了一些调整学习率的方法，并且根据<a href="https://ianafp.github.io/2023/07/15/resnet18%E5%9C%A8cifar10%E6%95%B0%E6%8D%AE%E9%9B%86%E4%B8%8A%E8%AE%AD%E7%BB%83/">上一篇文章，在CIFAR10数据集上训练ResNet18</a>中的代码应用这些调整。</p>
+<span id="more"></span>
+<h2 id="StepLR"><a href="#StepLR" class="headerlink" title="StepLR"></a>StepLR</h2><p>使用torch.optim进行优化时，我们往往会使用step()接口更新参数。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">loss_batch</span>(<span class="params">model,loss_func,xb,yb,opt=<span class="literal">None</span></span>):</span><br><span class="line">    loss = loss_func(model(xb),yb.long())</span><br><span class="line">    <span class="keyword">if</span> opt <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">        loss.backward()</span><br><span class="line">        opt.step()</span><br><span class="line">        opt.zero_grad()</span><br><span class="line">    <span class="keyword">return</span> loss.item(),<span class="built_in">len</span>(xb)</span><br></pre></td></tr></table></figure>
+<p>在上一篇文章中，每次对一个batch的数据训练然后更新参数。</p>
+<p>在pytorch中，我们可以记录step的调用，设置等step更新学习率。</p>
+<p><a target="_blank" rel="noopener" href="https://pytorch.org/docs/stable/generated/torch.optim.lr_scheduler.StepLR.html">官网StepLR文档</a></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Assuming optimizer uses lr = 0.05 for all groups</span></span><br><span class="line"><span class="comment"># lr = 0.05     if epoch &lt; 30</span></span><br><span class="line"><span class="comment"># lr = 0.005    if 30 &lt;= epoch &lt; 60</span></span><br><span class="line"><span class="comment"># lr = 0.0005   if 60 &lt;= epoch &lt; 90</span></span><br><span class="line"><span class="comment"># ...</span></span><br><span class="line">scheduler = StepLR(optimizer, step_size=<span class="number">30</span>, gamma=<span class="number">0.1</span>)</span><br><span class="line"><span class="keyword">for</span> epoch <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">100</span>):</span><br><span class="line">    train(...)</span><br><span class="line">    validate(...)</span><br><span class="line">    scheduler.step()</span><br></pre></td></tr></table></figure>
+<p>在fit函数中加上权重更新</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">fit</span>(<span class="params">epochs,model,loss_func,opt,train_dl,valid_dl</span>):</span><br><span class="line">    epoch = <span class="number">0</span></span><br><span class="line">    pre_loss = <span class="number">0</span></span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">        model.train()</span><br><span class="line">        <span class="keyword">for</span> xb,yb <span class="keyword">in</span> train_dl:</span><br><span class="line">            loss_batch(model,loss_func,xb,yb.long(),opt)</span><br><span class="line">        scheduler.step()</span><br><span class="line">        model.<span class="built_in">eval</span>()</span><br><span class="line">        <span class="keyword">with</span> torch.no_grad():</span><br><span class="line">            losses,nums = <span class="built_in">zip</span>(*[loss_batch(model,loss_func,xb,yb) <span class="keyword">for</span> xb,yb <span class="keyword">in</span> valid_dl])</span><br><span class="line">        val_loss = np.<span class="built_in">sum</span>(np.multiply(losses,nums)) / np.<span class="built_in">sum</span>(nums)</span><br><span class="line">        <span class="built_in">print</span>(epoch,val_loss)</span><br><span class="line">        <span class="keyword">import</span> math </span><br><span class="line">        <span class="keyword">if</span> math.fabs(val_loss-pre_loss)&lt;<span class="number">1e-7</span> <span class="keyword">or</span> epoch &gt; <span class="number">100</span>:</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        pre_loss = val_loss</span><br><span class="line">        epoch = epoch + <span class="number">1</span></span><br></pre></td></tr></table></figure>
+<h2 id="MULTISTEPLR"><a href="#MULTISTEPLR" class="headerlink" title="MULTISTEPLR"></a>MULTISTEPLR</h2><p><a target="_blank" rel="noopener" href="https://pytorch.org/docs/stable/generated/torch.optim.lr_scheduler.MultiStepLR.html">https://pytorch.org/docs/stable/generated/torch.optim.lr_scheduler.MultiStepLR.html</a></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Assuming optimizer uses lr = 0.05 for all groups</span></span><br><span class="line"><span class="comment"># lr = 0.05     if epoch &lt; 30</span></span><br><span class="line"><span class="comment"># lr = 0.005    if 30 &lt;= epoch &lt; 80</span></span><br><span class="line"><span class="comment"># lr = 0.0005   if epoch &gt;= 80</span></span><br><span class="line">scheduler = MultiStepLR(optimizer, milestones=[<span class="number">30</span>,<span class="number">80</span>], gamma=<span class="number">0.1</span>)</span><br><span class="line"><span class="keyword">for</span> epoch <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">100</span>):</span><br><span class="line">    train(...)</span><br><span class="line">    validate(...)</span><br><span class="line">    scheduler.step()</span><br></pre></td></tr></table></figure>
+<p>multisteplr原理很简单，只要step的计数值达到milestones中的节点值，那么学习率就会进行一次变换。</p>
+<p><a target="_blank" rel="noopener" href="https://pytorch.org/docs/stable/generated/torch.optim.lr_scheduler.ExponentialLR.html">https://pytorch.org/docs/stable/generated/torch.optim.lr_scheduler.ExponentialLR.html</a></p>
+<h2 id="Expotianal-LR"><a href="#Expotianal-LR" class="headerlink" title="Expotianal LR"></a>Expotianal LR</h2><p><a target="_blank" rel="noopener" href="https://pytorch.org/docs/stable/generated/torch.optim.lr_scheduler.ExponentialLR.html">https://pytorch.org/docs/stable/generated/torch.optim.lr_scheduler.ExponentialLR.html</a></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CLASStorch.optim.lr_scheduler.ExponentialLR(optimizer, gamma, last_epoch=- <span class="number">1</span>, verbose=<span class="literal">False</span>)</span><br></pre></td></tr></table></figure>
+<p>expotional LR 调整学习率以epoch为单位，每个epoch进行一次学习率的衰减。</p>
+<h2 id="Linear-LR"><a href="#Linear-LR" class="headerlink" title="Linear LR"></a>Linear LR</h2><p><a target="_blank" rel="noopener" href="https://pytorch.org/docs/stable/generated/torch.optim.lr_scheduler.LinearLR.html">https://pytorch.org/docs/stable/generated/torch.optim.lr_scheduler.LinearLR.html</a>    </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Assuming optimizer uses lr = 0.05 for all groups</span></span><br><span class="line"><span class="comment"># lr = 0.025    if epoch == 0</span></span><br><span class="line"><span class="comment"># lr = 0.03125  if epoch == 1</span></span><br><span class="line"><span class="comment"># lr = 0.0375   if epoch == 2</span></span><br><span class="line"><span class="comment"># lr = 0.04375  if epoch == 3</span></span><br><span class="line"><span class="comment"># lr = 0.05    if epoch &gt;= 4</span></span><br><span class="line">scheduler = LinearLR(self.opt, start_factor=<span class="number">0.5</span>, total_iters=<span class="number">4</span>)</span><br><span class="line"><span class="keyword">for</span> epoch <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">100</span>):</span><br><span class="line">    train(...)</span><br><span class="line">    validate(...)</span><br><span class="line">    scheduler.step()</span><br></pre></td></tr></table></figure>
+<p>linear lr是设置学习率的最大值和最小值，以epoch为单位线性变化。</p>
+<h2 id="Cycle-LR"><a href="#Cycle-LR" class="headerlink" title="Cycle LR"></a>Cycle LR</h2><p><a target="_blank" rel="noopener" href="https://pytorch.org/docs/stable/generated/torch.optim.lr_scheduler.CyclicLR.html">https://pytorch.org/docs/stable/generated/torch.optim.lr_scheduler.CyclicLR.html</a></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CLASStorch.optim.lr_scheduler.CyclicLR(optimizer, base_lr, max_lr, step_size_up=<span class="number">2000</span>, step_size_down=<span class="literal">None</span>, mode=<span class="string">&#x27;triangular&#x27;</span>, gamma=<span class="number">1.0</span>, scale_fn=<span class="literal">None</span>, scale_mode=<span class="string">&#x27;cycle&#x27;</span>, cycle_momentum=<span class="literal">True</span>, base_momentum=<span class="number">0.8</span>, max_momentum=<span class="number">0.9</span>, last_epoch=- <span class="number">1</span>, verbose=<span class="literal">False</span>)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">optimizer = torch.optim.SGD(model.parameters(), lr=<span class="number">0.1</span>, momentum=<span class="number">0.9</span>)</span><br><span class="line">scheduler = torch.optim.lr_scheduler.CyclicLR(optimizer, base_lr=<span class="number">0.01</span>, max_lr=<span class="number">0.1</span>)</span><br><span class="line">data_loader = torch.utils.data.DataLoader(...)</span><br><span class="line"><span class="keyword">for</span> epoch <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">10</span>):</span><br><span class="line">    <span class="keyword">for</span> batch <span class="keyword">in</span> data_loader:</span><br><span class="line">        train_batch(...)</span><br><span class="line">        scheduler.step()</span><br></pre></td></tr></table></figure>
+<p>cycle lr 的工作模式是使得学习率处于循环的升降，以期望参数学习可以跳出鞍点。</p>
+<h2 id="One-Cycle-Lr"><a href="#One-Cycle-Lr" class="headerlink" title="One Cycle Lr"></a>One Cycle Lr</h2><p><a target="_blank" rel="noopener" href="https://pytorch.org/docs/stable/generated/torch.optim.lr_scheduler.OneCycleLR.html?highlight=one+cycle+lr#torch.optim.lr_scheduler.OneCycleLR">https://pytorch.org/docs/stable/generated/torch.optim.lr_scheduler.OneCycleLR.html?highlight=one+cycle+lr#torch.optim.lr_scheduler.OneCycleLR</a></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">data_loader = torch.utils.data.DataLoader(...)</span><br><span class="line">optimizer = torch.optim.SGD(model.parameters(), lr=<span class="number">0.1</span>, momentum=<span class="number">0.9</span>)</span><br><span class="line">scheduler = torch.optim.lr_scheduler.OneCycleLR(optimizer, max_lr=<span class="number">0.01</span>, steps_per_epoch=<span class="built_in">len</span>(data_loader), epochs=<span class="number">10</span>)</span><br><span class="line"><span class="keyword">for</span> epoch <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">10</span>):</span><br><span class="line">    <span class="keyword">for</span> batch <span class="keyword">in</span> data_loader:</span><br><span class="line">        train_batch(...)</span><br><span class="line">        scheduler.step()</span><br></pre></td></tr></table></figure>
+<p>CycleLr的一周期版本</p>
+<h2 id="Consine-Anealing-Lr"><a href="#Consine-Anealing-Lr" class="headerlink" title="Consine Anealing Lr"></a>Consine Anealing Lr</h2><p><a target="_blank" rel="noopener" href="https://pytorch.org/docs/stable/generated/torch.optim.lr_scheduler.CosineAnnealingLR.html?highlight=cosineannealinglr#torch.optim.lr_scheduler.CosineAnnealingLR">https://pytorch.org/docs/stable/generated/torch.optim.lr_scheduler.CosineAnnealingLR.html?highlight=cosineannealinglr#torch.optim.lr_scheduler.CosineAnnealingLR</a></p>
+<p>余弦退火策略，使得学习率以余弦的规律变化，有利于逃脱鞍点。</p>
+<h2 id="Cosine-Annealing-WarmRestarts"><a href="#Cosine-Annealing-WarmRestarts" class="headerlink" title="Cosine Annealing WarmRestarts"></a>Cosine Annealing WarmRestarts</h2><p><a target="_blank" rel="noopener" href="https://pytorch.org/docs/stable/generated/torch.optim.lr_scheduler.CosineAnnealingWarmRestarts.html?highlight=cosineannealingwarmrestarts#torch.optim.lr_scheduler.CosineAnnealingWarmRestarts">https://pytorch.org/docs/stable/generated/torch.optim.lr_scheduler.CosineAnnealingWarmRestarts.html?highlight=cosineannealingwarmrestarts#torch.optim.lr_scheduler.CosineAnnealingWarmRestarts</a></p>
+<p>余弦退火策略的变种，在这个策略中，每轮迭代的轮数递增，且迭代中学习率处于余弦下降周期，完成一个周期后学习率突变到最大值。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">scheduler = CosineAnnealingWarmRestarts(optimizer, T_0, T_mult)</span><br><span class="line">iters = <span class="built_in">len</span>(dataloader)</span><br><span class="line"><span class="keyword">for</span> epoch <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">20</span>):</span><br><span class="line">    <span class="keyword">for</span> i, sample <span class="keyword">in</span> <span class="built_in">enumerate</span>(dataloader):</span><br><span class="line">        inputs, labels = sample[<span class="string">&#x27;inputs&#x27;</span>], sample[<span class="string">&#x27;labels&#x27;</span>]</span><br><span class="line">        optimizer.zero_grad()</span><br><span class="line">        outputs = net(inputs)</span><br><span class="line">        loss = criterion(outputs, labels)</span><br><span class="line">        loss.backward()</span><br><span class="line">        optimizer.step()</span><br><span class="line">        scheduler.step(epoch + i / iters)</span><br></pre></td></tr></table></figure>
+<h2 id="Lambda-Lr"><a href="#Lambda-Lr" class="headerlink" title="Lambda Lr"></a>Lambda Lr</h2><p>自定义学习率</p>
+<p><a target="_blank" rel="noopener" href="https://pytorch.org/docs/stable/generated/torch.optim.lr_scheduler.LambdaLR.html?highlight=lambda#torch.optim.lr_scheduler.LambdaLR">https://pytorch.org/docs/stable/generated/torch.optim.lr_scheduler.LambdaLR.html?highlight=lambda#torch.optim.lr_scheduler.LambdaLR</a></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CLASStorch.optim.lr_scheduler.LambdaLR(optimizer, lr_lambda, last_epoch=- <span class="number">1</span>, verbose=<span class="literal">False</span>)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Assuming optimizer has two groups.</span></span><br><span class="line">lambda1 = <span class="keyword">lambda</span> epoch: epoch // <span class="number">30</span></span><br><span class="line">lambda2 = <span class="keyword">lambda</span> epoch: <span class="number">0.95</span> ** epoch</span><br><span class="line">scheduler = LambdaLR(optimizer, lr_lambda=[lambda1, lambda2])</span><br><span class="line"><span class="keyword">for</span> epoch <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">100</span>):</span><br><span class="line">    train(...)</span><br><span class="line">    validate(...)</span><br><span class="line">    scheduler.step()</span><br></pre></td></tr></table></figure>
+<p>lambda是以epoch(int)作为参数的匿名函数，返回epoch相关的学习率值。</p>
+<h2 id="Sequencial-Lr"><a href="#Sequencial-Lr" class="headerlink" title="Sequencial Lr"></a>Sequencial Lr</h2><p><a target="_blank" rel="noopener" href="https://pytorch.org/docs/stable/generated/torch.optim.lr_scheduler.SequentialLR.html?highlight=sequential#torch.optim.lr_scheduler.SequentialLR">https://pytorch.org/docs/stable/generated/torch.optim.lr_scheduler.SequentialLR.html?highlight=sequential#torch.optim.lr_scheduler.SequentialLR</a></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Assuming optimizer uses lr = 1. for all groups</span></span><br><span class="line"><span class="comment"># lr = 0.1     if epoch == 0</span></span><br><span class="line"><span class="comment"># lr = 0.1     if epoch == 1</span></span><br><span class="line"><span class="comment"># lr = 0.9     if epoch == 2</span></span><br><span class="line"><span class="comment"># lr = 0.81    if epoch == 3</span></span><br><span class="line"><span class="comment"># lr = 0.729   if epoch == 4</span></span><br><span class="line">scheduler1 = ConstantLR(self.opt, factor=<span class="number">0.1</span>, total_iters=<span class="number">2</span>)</span><br><span class="line">scheduler2 = ExponentialLR(self.opt, gamma=<span class="number">0.9</span>)</span><br><span class="line">scheduler = SequentialLR(self.opt, schedulers=[scheduler1, scheduler2], milestones=[<span class="number">2</span>])</span><br><span class="line"><span class="keyword">for</span> epoch <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">100</span>):</span><br><span class="line">    train(...)</span><br><span class="line">    validate(...)</span><br><span class="line">    scheduler.step()</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CLASStorch.optim.lr_scheduler.SequentialLR(optimizer, schedulers, milestones, last_epoch=- <span class="number">1</span>, verbose=<span class="literal">False</span>)</span><br></pre></td></tr></table></figure>
+<p>以milestone为界，顺序调用不同的scheduler。</p>
+<h2 id="Chain-Scheduler"><a href="#Chain-Scheduler" class="headerlink" title="Chain Scheduler"></a>Chain Scheduler</h2><p><a target="_blank" rel="noopener" href="https://pytorch.org/docs/stable/generated/torch.optim.lr_scheduler.ChainedScheduler.html?highlight=chainedscheduler#torch.optim.lr_scheduler.ChainedScheduler">https://pytorch.org/docs/stable/generated/torch.optim.lr_scheduler.ChainedScheduler.html?highlight=chainedscheduler#torch.optim.lr_scheduler.ChainedScheduler</a></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Assuming optimizer uses lr = 1. for all groups</span></span><br><span class="line"><span class="comment"># lr = 0.09     if epoch == 0</span></span><br><span class="line"><span class="comment"># lr = 0.081    if epoch == 1</span></span><br><span class="line"><span class="comment"># lr = 0.729    if epoch == 2</span></span><br><span class="line"><span class="comment"># lr = 0.6561   if epoch == 3</span></span><br><span class="line"><span class="comment"># lr = 0.59049  if epoch &gt;= 4</span></span><br><span class="line">scheduler1 = ConstantLR(self.opt, factor=<span class="number">0.1</span>, total_iters=<span class="number">2</span>)</span><br><span class="line">scheduler2 = ExponentialLR(self.opt, gamma=<span class="number">0.9</span>)</span><br><span class="line">scheduler = ChainedScheduler([scheduler1, scheduler2])</span><br><span class="line"><span class="keyword">for</span> epoch <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">100</span>):</span><br><span class="line">    train(...)</span><br><span class="line">    validate(...)</span><br><span class="line">    scheduler.step()</span><br></pre></td></tr></table></figure>
+<p>chainable scheduler 是和sequential scheduler同样，按照次序调用不同的scheduler，但是保证学习率连续。</p>
+<h2 id="Constant-LR"><a href="#Constant-LR" class="headerlink" title="Constant LR"></a>Constant LR</h2><p><a target="_blank" rel="noopener" href="https://pytorch.org/docs/stable/generated/torch.optim.lr_scheduler.ConstantLR.html?highlight=constant">https://pytorch.org/docs/stable/generated/torch.optim.lr_scheduler.ConstantLR.html?highlight=constant</a></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Assuming optimizer uses lr = 0.05 for all groups</span></span><br><span class="line"><span class="comment"># lr = 0.025   if epoch == 0</span></span><br><span class="line"><span class="comment"># lr = 0.025   if epoch == 1</span></span><br><span class="line"><span class="comment"># lr = 0.025   if epoch == 2</span></span><br><span class="line"><span class="comment"># lr = 0.025   if epoch == 3</span></span><br><span class="line"><span class="comment"># lr = 0.05    if epoch &gt;= 4</span></span><br><span class="line">scheduler = ConstantLR(self.opt, factor=<span class="number">0.5</span>, total_iters=<span class="number">4</span>)</span><br><span class="line"><span class="keyword">for</span> epoch <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">100</span>):</span><br><span class="line">    train(...)</span><br><span class="line">    validate(...)</span><br><span class="line">    scheduler.step()</span><br></pre></td></tr></table></figure>
+<p>constant lr即把学习率设为常数，保持一定epoch</p>
+<h2 id="Reduce-LR-On-Plateau"><a href="#Reduce-LR-On-Plateau" class="headerlink" title="Reduce LR On Plateau"></a>Reduce LR On Plateau</h2><p><a target="_blank" rel="noopener" href="https://pytorch.org/docs/stable/generated/torch.optim.lr_scheduler.ReduceLROnPlateau.html?highlight=reducelronplateau#torch.optim.lr_scheduler.ReduceLROnPlateau">https://pytorch.org/docs/stable/generated/torch.optim.lr_scheduler.ReduceLROnPlateau.html?highlight=reducelronplateau#torch.optim.lr_scheduler.ReduceLROnPlateau</a></p>
+<p>Reduce Lr On Plateau以学习率或者损失函数为观测对象，在更新学习率时根据学习率和损失函数为性能是否提升的标准，自适应更新学习率。 </p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/pytorch/" rel="tag"># pytorch</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/07/15/resnet18%E5%9C%A8cifar10%E6%95%B0%E6%8D%AE%E9%9B%86%E4%B8%8A%E8%AE%AD%E7%BB%83/" rel="prev" title="resnet18在cifar10数据集上训练">
+                  <i class="fa fa-chevron-left"></i> resnet18在cifar10数据集上训练
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/07/21/PaperReading-Efficientnet-Rethinking-model-scaling-for-convolutional-neural-networks/" rel="next" title="PaperReading:Efficientnet: Rethinking model scaling for convolutional neural networks">
+                  PaperReading:Efficientnet: Rethinking model scaling for convolutional neural networks <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">ianafp</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"ianafp","repo":"blog-comments","client_id":"3246cd13c465b0ae6f16","client_secret":"b25bc48b816eef1c4c5ada6fd132f6261d14c999","admin_user":"ianafp","distraction_free_mode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"20142b733ceae8c36045662f195bb5a8"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>
